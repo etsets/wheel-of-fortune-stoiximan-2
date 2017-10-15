@@ -40,7 +40,8 @@ namespace WheelOfFortune.Admin
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env,
+                              RoleManager<IdentityRole> rolemanager)
         {
             if (env.IsDevelopment())
             {
@@ -63,6 +64,8 @@ namespace WheelOfFortune.Admin
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //await Initializer.initial(rolemanager);
         }
     }
 }
