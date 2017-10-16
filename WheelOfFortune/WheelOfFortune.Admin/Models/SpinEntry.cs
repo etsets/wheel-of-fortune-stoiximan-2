@@ -10,8 +10,9 @@ namespace WheelOfFortune.Admin.Models
     public class SpinEntry
     {
         [Key]
-        [ForeignKey("HistoryEntry")]
-        public string EntryId { get; set; }
+        public int HistoryEntryId { get; set; }
+        [ForeignKey("HistoryEntryId")]
+        public HistoryEntry BelongsToHistoryEntry { get; set; }
 
         [Required]
         [DataType(DataType.Currency)]
@@ -20,7 +21,5 @@ namespace WheelOfFortune.Admin.Models
         [Required]
         [DataType(DataType.Currency)]
         public float ResultAmount { get; set; }
-
-
     }
 }

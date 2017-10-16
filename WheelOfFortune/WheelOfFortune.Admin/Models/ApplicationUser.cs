@@ -14,11 +14,11 @@ namespace WheelOfFortune.Admin.Models
     {
         [Required]
         [StringLength(20)]
-        public string Firstname { get; set; }
+        public String Firstname { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string Lastname { get; set; }
+        public String Lastname { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -29,7 +29,7 @@ namespace WheelOfFortune.Admin.Models
         [DataType(DataType.ImageUrl)]
         //[DataType(DataType.Upload)]
         [StringLength(255)]
-        public string Photo { get; set; }
+        public String Photo { get; set; }
 
         [DataType(DataType.DateTime)]
         public DateTime? LastLogin { get; set; }
@@ -38,6 +38,7 @@ namespace WheelOfFortune.Admin.Models
         [DataType(DataType.Currency)]
         public float Balance { get; set; } = 200.0F;
 
+        [InverseProperty("CreatedBy")]
         public ICollection<HistoryEntry> HistoryEntries { get; set; }
     }
 }

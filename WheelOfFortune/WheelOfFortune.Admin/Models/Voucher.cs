@@ -9,12 +9,19 @@ namespace WheelOfFortune.Admin.Models
 {
     public class Voucher
     {
+        public enum VoucherStatus : int
+        {
+            Revoked = 0,
+            New = 1,
+            Available = 2
+        }
+
         [Key]
-        public int VoucherId { get; }
+        public int VoucherId { get; set; }
 
         [Required]
         [MaxLength(6), MinLength(6)]
-        public string VoucherCode { get; set; }
+        public String VoucherCode { get; set; }
 
         [Required]
         [DataType(DataType.Currency)]
@@ -25,12 +32,6 @@ namespace WheelOfFortune.Admin.Models
 
         [Required]
         public VoucherStatus Status { get; set; } = VoucherStatus.New;
-
-        public enum VoucherStatus : int
-        {
-            Revoked = 0,
-            New = 1,
-            Available = 2
-        }
+   
     }
 }

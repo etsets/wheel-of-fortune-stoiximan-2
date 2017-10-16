@@ -7,14 +7,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WheelOfFortune.Admin.Models
 {
-    public class Deposit
+    public class DepositEntry
     {
-        [Key]
-        [ForeignKey("HistoryEntry")]
-        public string EntryId { get; set; }
+        public int HistoryEntryId { get; set; }
+        [ForeignKey("HistoryEntryId")]
+        public HistoryEntry BelongsToHistoryEntry { get; set; }
 
-        [Key]
-        [ForeignKey("Voucher")]
-        public string VoucherId { get; set; }
+        public int VoucherId { get; set; }
+        [ForeignKey("VoucherId")]
+        public Voucher BelongsToVoucherEntry { get; set; }
     }
 }

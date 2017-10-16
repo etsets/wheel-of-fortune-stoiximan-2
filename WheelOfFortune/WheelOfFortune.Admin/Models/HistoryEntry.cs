@@ -9,11 +9,17 @@ namespace WheelOfFortune.Admin.Models
 {
     public class HistoryEntry
     {
-        [Key]
-        public int EntryId { get; }
+        public enum EntryType : int
+        {
+            Spin = 1,
+            Deposit = 2
+        }
 
-        [ForeignKey("ApplicationUser")]
-        public string UserId { get; set; }
+        [Key]
+        public int HistoryEntryId { get; set; }
+
+        [Required]
+        public ApplicationUser CreatedBy { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
@@ -21,13 +27,5 @@ namespace WheelOfFortune.Admin.Models
 
         [Required]
         public EntryType HistoryEntryTypeId { get; set; }
-
-
-        public enum EntryType : int
-        {
-            Spin = 1, 
-            Deposit = 2
-        }
-
     }
 }
