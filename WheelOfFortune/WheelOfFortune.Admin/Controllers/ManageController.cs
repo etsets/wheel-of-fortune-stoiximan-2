@@ -16,7 +16,7 @@ using WheelOfFortune.Admin.Services;
 
 namespace WheelOfFortune.Admin.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
