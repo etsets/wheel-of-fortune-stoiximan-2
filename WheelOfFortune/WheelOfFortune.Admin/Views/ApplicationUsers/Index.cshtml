@@ -1,58 +1,54 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 @using WheelOfFortune.Admin.Models
+@using WheelOfFortune.Admin.Additionals
 
 @inject SignInManager<ApplicationUser> _signInManager
 @inject UserManager<ApplicationUser> _userManager
 
-@model IEnumerable<WheelOfFortune.Admin.Models.ApplicationUser>
+@model PaginatedList<WheelOfFortune.Admin.Models.ApplicationUser>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "List of Registered Gamers";
 }
 
-<h2>Index</h2>
+<h2>@ViewData["Title"]</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.UserName)
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Username</a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Email)
+                    <a asp-action="Index" asp-route-sortOrder="@ViewData["EmailSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Email</a>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.EmailConfirmed)
+                    Email confirmed
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PhoneNumber)
-                </th>
-
-                <th>
-                    @Html.DisplayNameFor(model => model.TwoFactorEnabled)
+                    Phone number
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.LockoutEnd)
+                    2 factor enabled
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.LockoutEnabled)
+                    Lockout end
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.AccessFailedCount)
+                    Lockout enabled
+                </th>
+                <th>
+                    Access failed count
                 </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-    //var isInRole = await _userManager.IsInRoleAsync(item, "Admin");
     if (!await _userManager.IsInRoleAsync(item, "Admin"))
     {
-
 
         <tr>
             <td>
@@ -81,11 +77,30 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Info</a> |
             </td>
         </tr>
     }
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-page="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>

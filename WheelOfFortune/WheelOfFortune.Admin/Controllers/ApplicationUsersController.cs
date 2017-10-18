@@ -10,6 +10,7 @@ using WheelOfFortune.Admin.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using WheelOfFortune.Admin.Additionals;
 
 namespace WheelOfFortune.Admin.Controllers
 {
@@ -34,10 +35,24 @@ namespace WheelOfFortune.Admin.Controllers
         }
 
         // GET: ApplicationUsers
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            //ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+
             var gamers = from s in _context.Gamers
                            select s;
             switch (sortOrder)
@@ -45,18 +60,16 @@ namespace WheelOfFortune.Admin.Controllers
                 case "name_desc":
                     gamers = gamers.OrderByDescending(s => s.UserName);
                     break;
-                /*case "Date":
-                    gamers = gamers.OrderBy(s => s.EnrollmentDate);
+                case "Email":
+                    gamers = gamers.OrderBy(s => s.Email);
                     break;
-                case "date_desc":
-                    gamers = gamers.OrderByDescending(s => s.EnrollmentDate);
-                    break;*/
                 default:
                     gamers = gamers.OrderBy(s => s.Email);
                     break;
             }
 
-            return View(await _context.Gamers.ToListAsync());
+            int pageSize = 3;
+            return View(await PaginatedList<ApplicationUser>.CreateAsync(gamers.AsNoTracking(), page ?? 1, pageSize));
         }
 
         // GET: ApplicationUsers/Details/5
@@ -138,7 +151,6 @@ namespace WheelOfFortune.Admin.Controllers
                 {
                     try
                     {
-                        //_context.Update(applicationUser);
                         await _context.SaveChangesAsync();
                     }
                     catch (DbUpdateConcurrencyException)
@@ -149,7 +161,6 @@ namespace WheelOfFortune.Admin.Controllers
                         }
                         else
                         {
-                            //throw;
                             ModelState.AddModelError("", "Unable to save changes. " +
                                         "Try again, and if the problem persists, " +
                                         "see your system administrator.");
