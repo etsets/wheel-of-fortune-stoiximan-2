@@ -235,7 +235,8 @@ namespace WheelOfFortune.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                Guid guid = Guid.NewGuid();
+                var user = new ApplicationUser { Firstname = model.Firstname, Lastname = model.Lastname, Photo = "https://gypweufs01.blob.core.windows.net/faceapi/" + model.Photo, Birthdate = model.Birthdate.Date, UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
