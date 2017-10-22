@@ -36,5 +36,7 @@ namespace WheelOfFortune.Admin.Data
             builder.Entity<DepositEntry>()
                 .HasKey(d => new { d.HistoryEntryId, d.VoucherId });
         }
+
+        public DbSet<WheelOfFortune.Admin.Models.ApplicationUser> Gamers { get; set; }
     }
 }
