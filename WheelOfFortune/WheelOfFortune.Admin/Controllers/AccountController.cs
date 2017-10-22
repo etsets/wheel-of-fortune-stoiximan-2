@@ -227,7 +227,16 @@ namespace WheelOfFortune.Admin.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                //Fill rest fields with defaulT values - we do not care
+                var user = new ApplicationUser
+                { UserName = model.Email,
+                    Email = model.Email,
+                    Firstname = model.Email,
+                    Lastname = model.Email,
+                    Birthdate = DateTime.Today,
+                    Photo = "empty.png",
+                    LastLogin = DateTime.Now
+                };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
