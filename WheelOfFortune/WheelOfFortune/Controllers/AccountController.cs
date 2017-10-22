@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using WheelOfFortune.Models;
 using WheelOfFortune.Models.AccountViewModels;
 using WheelOfFortune.Services;
+using Microsoft.AspNetCore.Http;
+using WheelOfFortune.Extensions;
+using Microsoft.Extensions.Options;
+using System.Net.Http;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace WheelOfFortune.Controllers
 {
@@ -24,17 +27,22 @@ namespace WheelOfFortune.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        const string subscriptionKey = "7acca518d1b141db9f629c30c8a424af";
+        const string uriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
+        private readonly AzureStorageConfig storageConfig = null;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IOptions<AzureStorageConfig> config)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            storageConfig = config.Value;
         }
 
         [TempData]
@@ -228,6 +236,77 @@ namespace WheelOfFortune.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> Upload(ICollection<IFormFile> files)
+        {
+            bool isUploaded = false;
+            try
+            {
+                if (files.Count == 0)
+                    return BadRequest("No files received from the upload");
+                if (storageConfig.AccountKey == string.Empty || storageConfig.AccountName == string.Empty)
+                    return BadRequest("sorry, can't retrieve your azure storage details from appsettings.js, make sure that you add azure storage details there");
+                if (storageConfig.ImageContainer == string.Empty)
+                    return BadRequest("Please provide a name for your image container in the azure blob storage");
+                foreach (var formFile in files)
+                {
+                    if (StorageHelper.IsImage(formFile))
+                    {
+                        if (formFile.Length > 0)
+                        {
+                            using (Stream streamfile = formFile.OpenReadStream())
+                            {
+                                //formFile.FileName = formFile.FileName + DateTime.Now.ToString();
+                                HttpClient client = new HttpClient();
+
+                                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+                                string requestParameters = "visualFeatures=Categories,Description,Color&language=en";
+                                string uri = uriBase + "?" + requestParameters;
+                                HttpResponseMessage response;
+                                Guid guid = Guid.NewGuid();
+                                BinaryReader binaryReader = new BinaryReader(streamfile);
+                                byte[] byteData = binaryReader.ReadBytes((int)streamfile.Length);
+                                using (ByteArrayContent content = new ByteArrayContent(byteData))
+                                {
+                                    content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                                    response = await client.PostAsync(uri, content);
+                                    string contentString = await response.Content.ReadAsStringAsync();
+
+                                    if (contentString.Contains("faceId"))
+                                    {
+                                        isUploaded = await StorageHelper.UploadFileToStorage(streamfile, formFile.FileName, storageConfig);
+
+                                        //return Ok("Successful Upload");
+                                    }
+                                    else
+                                    {
+                                        return BadRequest("Look like the image contains no Face");
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return new UnsupportedMediaTypeResult();
+                    }
+                }
+                if (isUploaded)
+                {
+                    if (storageConfig.ThumbnailContainer != string.Empty)
+                        return new AcceptedAtActionResult("GetThumbNails", "Images", null, null);
+                    else
+                        return new AcceptedResult();
+                }
+                else
+                    return BadRequest("Look like the image couldnt upload to the storage");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
@@ -235,7 +314,7 @@ namespace WheelOfFortune.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                Guid guid = Guid.NewGuid();
+               // Stream streamfile = photo.OpenReadStream();
                 var user = new ApplicationUser { Firstname = model.Firstname, Lastname = model.Lastname, Photo = "https://gypweufs01.blob.core.windows.net/faceapi/" + model.Photo, Birthdate = model.Birthdate.Date, UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

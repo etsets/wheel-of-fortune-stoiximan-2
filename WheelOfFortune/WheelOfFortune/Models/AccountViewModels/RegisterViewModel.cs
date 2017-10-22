@@ -23,6 +23,8 @@ namespace WheelOfFortune.Models.AccountViewModels
         [Required]
         [Display(Name = "Birthdate")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.DateTime)]
+        //[Range(typeof(DateTime),"01/01/1980","01/01/2017")]
         public DateTime Birthdate { get; set; }
 
         [Required]
