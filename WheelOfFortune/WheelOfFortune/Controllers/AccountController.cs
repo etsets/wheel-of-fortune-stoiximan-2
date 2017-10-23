@@ -236,9 +236,43 @@ namespace WheelOfFortune.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                
+                //Stream streamfile = file.OpenReadStream();
+
+                var user = new ApplicationUser { Firstname = model.Firstname, Lastname = model.Lastname, Photo = "https://gypweufs01.blob.core.windows.net/faceapi/", Birthdate = model.Birthdate.Date, UserName = model.Email, Email = model.Email };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User created a new account with password.");
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+
+                         //Prevent newly registered users from being automatically logged on by commenting out the following line
+                         //await _signInManager.SignInAsync(user, isPersistent: false);
+                         _logger.LogInformation("User created a new account with password.");
+                    return RedirectToLocal(returnUrl);
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        [HttpPost("[action]")]
         public async Task<IActionResult> Upload(ICollection<IFormFile> files)
         {
             bool isUploaded = false;
+
             try
             {
                 if (files.Count == 0)
@@ -275,14 +309,14 @@ namespace WheelOfFortune.Controllers
                                     {
                                         isUploaded = await StorageHelper.UploadFileToStorage(streamfile, formFile.FileName, storageConfig);
 
-                                        //return Ok("Successful Upload");
+                                        return Ok("Successful Upload");
                                     }
                                     else
                                     {
-                                        return BadRequest("Look like the image contains no Face");
+                                        return View("Register");
+
                                     }
                                 }
-
                             }
                         }
                     }
@@ -291,50 +325,25 @@ namespace WheelOfFortune.Controllers
                         return new UnsupportedMediaTypeResult();
                     }
                 }
+
                 if (isUploaded)
                 {
                     if (storageConfig.ThumbnailContainer != string.Empty)
+
                         return new AcceptedAtActionResult("GetThumbNails", "Images", null, null);
+
                     else
+
                         return new AcceptedResult();
                 }
                 else
+
                     return BadRequest("Look like the image couldnt upload to the storage");
-            }
+                }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-        }
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
-            {
-               // Stream streamfile = photo.OpenReadStream();
-                var user = new ApplicationUser { Firstname = model.Firstname, Lastname = model.Lastname, Photo = "https://gypweufs01.blob.core.windows.net/faceapi/" + model.Photo, Birthdate = model.Birthdate.Date, UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
-
-                         //Prevent newly registered users from being automatically logged on by commenting out the following line
-                         //await _signInManager.SignInAsync(user, isPersistent: false);
-                         _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
-                }
-                AddErrors(result);
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
         }
 
         [HttpPost]

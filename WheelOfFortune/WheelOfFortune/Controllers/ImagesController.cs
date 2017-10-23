@@ -74,11 +74,12 @@ namespace WheelOfFortune.Controllers
                                     {
                                         isUploaded = await StorageHelper.UploadFileToStorage(streamfile, formFile.FileName, storageConfig);
 
-                                        //return Ok("Successful Upload");
+                                        return Ok("Successful Upload");
                                     }
                                     else
                                     {
-                                        return BadRequest("Look like the image contains no Face");
+                                        return BadRequest("Look like the image couldnt upload to the storage");
+                                        
                                     }
                                 }
 
@@ -103,69 +104,8 @@ namespace WheelOfFortune.Controllers
                 }
                 else
 
-                    return BadRequest("Look like the image couldnt upload to the storage");
-
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> upload2(IFormFile files)
-        {
-            bool isUploaded = false;
-
-            try
-            {
-
-                // if (photo.Count == 0)
-
-                // return BadRequest("No files received from the upload");
-
-                if (storageConfig.AccountKey == string.Empty || storageConfig.AccountName == string.Empty)
-
-                    return BadRequest("sorry, can't retrieve your azure storage details from appsettings.js, make sure that you add azure storage details there");
-
-                if (storageConfig.ImageContainer == string.Empty)
-
-                    return BadRequest("Please provide a name for your image container in the azure blob storage");
-
-                //foreach (var formFile in files)
-                // {
-                if (StorageHelper.IsImage(files))
-                {
-                    if (files.Length > 0)
-                    {
-                        using (Stream stream = files.OpenReadStream())
-                        {
-                            //formFile.FileName = formFile.FileName + DateTime.Now.ToString();
-                            isUploaded = await StorageHelper.UploadFileToStorage(stream, files.FileName, storageConfig);
-                        }
-                    }
-                }
-                else
-                {
-                    return new UnsupportedMediaTypeResult();
-                }
-                //  }
-
-                if (isUploaded)
-                {
-                    if (storageConfig.ThumbnailContainer != string.Empty)
-
-                        return new AcceptedAtActionResult("GetThumbNails", "Images", null, null);
-
-                    else
-
-                        return new AcceptedResult();
-                }
-                else
-
-                    return BadRequest("Look like the image couldnt upload to the storage");
-
+                   return BadRequest("Look like the image couldnt upload to the storage");
+            
 
             }
             catch (Exception ex)
@@ -173,8 +113,6 @@ namespace WheelOfFortune.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
 
         // GET /api/images/thumbnails
         [HttpGet("thumbnails")]
