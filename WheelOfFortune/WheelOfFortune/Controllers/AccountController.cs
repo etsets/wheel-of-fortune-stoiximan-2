@@ -243,30 +243,46 @@ namespace WheelOfFortune.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                
-                //Stream streamfile = file.OpenReadStream();
-
-                var user = new ApplicationUser { Firstname = model.Firstname, Lastname = model.Lastname, Photo = "https://gypweufs01.blob.core.windows.net/faceapi/", Birthdate = model.Birthdate.Date, UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                model.Photo = model.ActualPhoto.FileName;
+                using (Stream streamfile = model.ActualPhoto.OpenReadStream())
                 {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
-
-                         //Prevent newly registered users from being automatically logged on by commenting out the following line
-                         //await _signInManager.SignInAsync(user, isPersistent: false);
-                         _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    HttpClient client = new HttpClient();
+                    client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+                    string requestParameters = "visualFeatures=Categories,Description,Color&language=en";
+                    string uri = uriBase + "?" + requestParameters;
+                    HttpResponseMessage response;
+                    BinaryReader binaryReader = new BinaryReader(streamfile);
+                    byte[] byteData = binaryReader.ReadBytes((int)streamfile.Length);
+                    using (ByteArrayContent content = new ByteArrayContent(byteData))
+                    {
+                        content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                        response = await client.PostAsync(uri, content);
+                        string contentString = await response.Content.ReadAsStringAsync();
+                        if (contentString.Contains("faceId"))
+                        {
+                            var user = new ApplicationUser { Firstname = model.Firstname, Lastname = model.Lastname, Photo = "https://gypweufs01.blob.core.windows.net/faceapi/" + model.Photo, Birthdate = model.Birthdate.Date, UserName = model.Email, Email = model.Email };
+                            var result = await _userManager.CreateAsync(user, model.Password);
+                            _logger.LogInformation("User created a new account with password.");
+                            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                            var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                            await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                            _logger.LogInformation("User created a new account with password.");
+                            return RedirectToLocal(returnUrl);
+                        }
+                        else
+                        {
+                            return View(model);
+                        }
+                    }
                 }
-                AddErrors(result);
             }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            else
+            {
+                return View(model);
+            }
         }
+            
+                    
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Upload(ICollection<IFormFile> files)

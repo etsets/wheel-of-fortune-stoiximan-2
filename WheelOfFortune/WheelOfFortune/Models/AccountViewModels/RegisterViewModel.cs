@@ -14,11 +14,14 @@ namespace WheelOfFortune.Models.AccountViewModels
         [Display(Name = "LastName")]
         public string Lastname { get; set; }
 
-        [Required]
         [Display(Name = "Photo")]
+        public string Photo { get; set; }
+
+        [Required]
+        [Display(Name = "ActualPhoto")]
         //public string Photo { get; set; }
         //[FileExtensions(Extensions = "jpg,jpeg")]
-        public IFormFile Photo { get; set; }
+        public IFormFile ActualPhoto { get; set; }
 
         [Required]
         [Display(Name = "Birthdate")]
