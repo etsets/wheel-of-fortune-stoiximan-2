@@ -20,7 +20,7 @@ namespace WheelOfFortune.Models.AccountViewModels
         [Required]
         [Display(Name = "ActualPhoto")]
         //public string Photo { get; set; }
-        //[FileExtensions(Extensions = "jpg,jpeg")]
+        //[FileExtensions(Extensions = "png")]
         public IFormFile ActualPhoto { get; set; }
 
         [Required]

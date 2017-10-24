@@ -243,7 +243,8 @@ namespace WheelOfFortune.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                model.Photo = model.ActualPhoto.FileName;
+                model.Photo = DateTime.Now.Millisecond.ToString() + DateTime.Now.Second.ToString() + model.ActualPhoto.FileName;
+
                 using (Stream streamfile = model.ActualPhoto.OpenReadStream())
                 {
                     HttpClient client = new HttpClient();
@@ -255,11 +256,14 @@ namespace WheelOfFortune.Controllers
                     byte[] byteData = binaryReader.ReadBytes((int)streamfile.Length);
                     using (ByteArrayContent content = new ByteArrayContent(byteData))
                     {
+                        bool isUploaded = false;
                         content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                         response = await client.PostAsync(uri, content);
                         string contentString = await response.Content.ReadAsStringAsync();
                         if (contentString.Contains("faceId"))
                         {
+                            //Guid guid = new Guid();
+                            isUploaded = await StorageHelper.UploadFileToStorage(model.ActualPhoto, model.Photo, storageConfig);
                             var user = new ApplicationUser { Firstname = model.Firstname, Lastname = model.Lastname, Photo = "https://gypweufs01.blob.core.windows.net/faceapi/" + model.Photo, Birthdate = model.Birthdate.Date, UserName = model.Email, Email = model.Email };
                             var result = await _userManager.CreateAsync(user, model.Password);
                             _logger.LogInformation("User created a new account with password.");
@@ -279,86 +283,6 @@ namespace WheelOfFortune.Controllers
             else
             {
                 return View(model);
-            }
-        }
-            
-                    
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Upload(ICollection<IFormFile> files)
-        {
-            bool isUploaded = false;
-
-            try
-            {
-                if (files.Count == 0)
-                    return BadRequest("No files received from the upload");
-                if (storageConfig.AccountKey == string.Empty || storageConfig.AccountName == string.Empty)
-                    return BadRequest("sorry, can't retrieve your azure storage details from appsettings.js, make sure that you add azure storage details there");
-                if (storageConfig.ImageContainer == string.Empty)
-                    return BadRequest("Please provide a name for your image container in the azure blob storage");
-                foreach (var formFile in files)
-                {
-                    if (StorageHelper.IsImage(formFile))
-                    {
-                        if (formFile.Length > 0)
-                        {
-                            using (Stream streamfile = formFile.OpenReadStream())
-                            {
-                                //formFile.FileName = formFile.FileName + DateTime.Now.ToString();
-                                HttpClient client = new HttpClient();
-
-                                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
-                                string requestParameters = "visualFeatures=Categories,Description,Color&language=en";
-                                string uri = uriBase + "?" + requestParameters;
-                                HttpResponseMessage response;
-                                Guid guid = Guid.NewGuid();
-                                BinaryReader binaryReader = new BinaryReader(streamfile);
-                                byte[] byteData = binaryReader.ReadBytes((int)streamfile.Length);
-                                using (ByteArrayContent content = new ByteArrayContent(byteData))
-                                {
-                                    content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                                    response = await client.PostAsync(uri, content);
-                                    string contentString = await response.Content.ReadAsStringAsync();
-
-                                    if (contentString.Contains("faceId"))
-                                    {
-                                        isUploaded = await StorageHelper.UploadFileToStorage(streamfile, formFile.FileName, storageConfig);
-
-                                        return Ok("Successful Upload");
-                                    }
-                                    else
-                                    {
-                                        return View("Register");
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        return new UnsupportedMediaTypeResult();
-                    }
-                }
-
-                if (isUploaded)
-                {
-                    if (storageConfig.ThumbnailContainer != string.Empty)
-
-                        return new AcceptedAtActionResult("GetThumbNails", "Images", null, null);
-
-                    else
-
-                        return new AcceptedResult();
-                }
-                else
-
-                    return BadRequest("Look like the image couldnt upload to the storage");
-                }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
             }
         }
 

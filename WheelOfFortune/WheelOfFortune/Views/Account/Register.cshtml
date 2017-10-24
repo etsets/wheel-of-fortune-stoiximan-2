@@ -44,23 +44,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="Photo"></label>
-                @*<input asp-for="Photo" id ="urlimageuploaded" class="form-control" readonly="readonly" />*@ 
                 <input type="file" name="ActualPhoto" />
             </div>
             <button type="submit" class="btn btn-default">Register</button>
         </div>
     </form>
-
-    @*<form action="/account/upload"
-          method="post"
-          enctype="multipart/form-data">
-        <div class="form-group">
-            <input type="file" name="files" />
-            <input type="submit" value="Upload Photo" />
-           <button id="btnUpload" class="btn btn-sm btn-info">Upload</button>
-        </div>
-    </form>*@
-
 
     </div>
 
@@ -68,23 +56,4 @@
     @section Scripts {
         @await Html.PartialAsync("_ValidationScriptsPartial")
         }
-    @*<script type="text/javascript">
-
-        (function ($) {
-            var $url = $('#urlimageuploaded');
-
-            function upload(e) {
-                $.post('/api/images/upload')
-                var language = $('.dropdown-menu').data('language');
-                .done(function (data) {
-                    $url.val(data.text);
-                    console.log(data);
-                });
-            }
-
-            btnUpload.on('click', upload);
-        })(jQuery);
-
-    </script>
-    }*@
 

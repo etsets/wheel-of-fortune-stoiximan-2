@@ -72,7 +72,7 @@ namespace WheelOfFortune.Controllers
 
                                     if (contentString.Contains("faceId"))
                                     {
-                                        isUploaded = await StorageHelper.UploadFileToStorage(streamfile, formFile.FileName, storageConfig);
+                                        isUploaded = await StorageHelper.UploadFileToStorage(formFile, formFile.FileName, storageConfig);
 
                                         return Ok("Successful Upload");
                                     }
