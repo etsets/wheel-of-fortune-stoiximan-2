@@ -27,8 +27,8 @@ namespace WheelOfFortune.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
-        const string subscriptionKey = "7acca518d1b141db9f629c30c8a424af";
-        const string uriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
+        const string subscriptionKey = "face_api_key";
+        const string uriBase = "https://face_api_url";
         private readonly AzureStorageConfig storageConfig = null;
 
         public AccountController(
