@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace WheelOfFortune.Models.AccountViewModels
 {
@@ -17,17 +18,15 @@ namespace WheelOfFortune.Models.AccountViewModels
         [Display(Name = "Photo")]
         public string Photo { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Your photo is required")]
         [Display(Name = "ActualPhoto")]
-        //public string Photo { get; set; }
-        //[FileExtensions(Extensions = "png")]
+        [ValidateFile]
         public IFormFile ActualPhoto { get; set; }
 
         [Required]
         [Display(Name = "Birthdate")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
-        [DataType(DataType.DateTime)]
-        //[Range(typeof(DateTime),"01/01/1980","01/01/2017")]
+        [CustomDateRange(ErrorMessage = "You must be over 21 years old")]
+        [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Birthdate { get; set; }
 
         [Required]
@@ -45,5 +44,35 @@ namespace WheelOfFortune.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
+
+    public class CustomDateRangeAttribute : RangeAttribute
+    {
+        public CustomDateRangeAttribute() : base(typeof(DateTime), DateTime.Now.AddYears(-70).ToString(), DateTime.Now.AddYears(-21).ToString())
+        { }
+    }
+
+    public class ValidateFileAttribute : ValidationAttribute
+    {
+        public override bool IsValid(object value)
+        {
+            int MaxContentLength = 1024 * 1024 * 2; //2 MB
+            string[] AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".png" };
+            var file = value as IFormFile;
+            if (file == null)
+                return false;
+            else if (!AllowedFileExtensions.Contains(file.FileName.Substring(file.FileName.LastIndexOf('.'))))
+            {
+                ErrorMessage = "Your Photo should be of type: " + string.Join(", ", AllowedFileExtensions);
+                return false;
+            }
+            else if (file.Length > MaxContentLength)
+            {
+                ErrorMessage = "Your Photo is too large, maximum allowed size is : " + (MaxContentLength / 1024).ToString() + "MB";
+                return false;
+            }
+            else
+                return true;
+        }
     }
 }
