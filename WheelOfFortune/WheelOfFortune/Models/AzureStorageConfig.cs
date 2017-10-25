@@ -7,7 +7,7 @@ namespace WheelOfFortune.Models
 {
     public class AzureStorageConfig
     {
-        public string AccountName = "azure_storage_account_name";
+        public string AccountName = "azure_sotrage_account_name";
         public string AccountKey = "azure_storage_account_key";
         public string QueueName { get; set; }
         public string ImageContainer = "faceapi";

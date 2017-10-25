@@ -28,7 +28,7 @@ namespace WheelOfFortune.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         const string subscriptionKey = "face_api_key";
-        const string uriBase = "https://face_api_url";
+        const string uriBase = "https://faceapi_url";
         private readonly AzureStorageConfig storageConfig = null;
 
         public AccountController(

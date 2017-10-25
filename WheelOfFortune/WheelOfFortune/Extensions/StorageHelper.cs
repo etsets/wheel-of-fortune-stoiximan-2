@@ -31,6 +31,7 @@ namespace WheelOfFortune.Extensions
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference(_storageConfig.ImageContainer);
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+            blockBlob.Properties.ContentType = file.ContentType;
             using (var fileStream = file.OpenReadStream())
             {
                 await blockBlob.UploadFromStreamAsync(fileStream);
