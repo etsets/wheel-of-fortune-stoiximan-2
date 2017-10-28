@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WheelOfFortune.Admin.Models;
+using WheelOfFortune.Admin.Data;
 
 namespace WheelOfFortune.Admin.Controllers
 {
@@ -14,22 +15,24 @@ namespace WheelOfFortune.Admin.Controllers
     {
         int length = 6 ;
         private static Random random = new Random();
-        // GET: api/CreateCoupons
-        [HttpGet]
-        public string Get()
+        private readonly ApplicationDbContext _context;
+
+         public CreateCouponsController(ApplicationDbContext context)
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
+            _context = context;
         }
 
         // GET: api/CreateCoupons/5
         [HttpGet("{numberOfTickets}", Name = "Get")]
-        public IEnumerable<string> Get(int numberOfTickets)
+        public async Task<IEnumerable<string>> GetAsync(int numberOfTickets)
         {
+            var existingCoupons = from s  in _context.Vouchers
+                                            select s;
+
             List<string> coupons = new List<string>();
+            List<Voucher> newCoupons = new List<Voucher>();
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            for (int i = 0 ; i<= numberOfTickets; i++)
+            while (coupons.Count < numberOfTickets)
             {
                 string coupon = new string(Enumerable.Repeat(chars, length)
                         .Select(s => s[random.Next(s.Length)]).ToArray());
@@ -38,8 +41,17 @@ namespace WheelOfFortune.Admin.Controllers
                 voucher.VoucherCode = coupon;
                 voucher.IsUsed = true;
                 voucher.CreditAmount = 10;
-                coupons.Insert(0,coupon); 
+
+                if (!existingCoupons.Any(cpn => cpn.VoucherCode.Equals(coupon))){
+                    newCoupons.Add(voucher);
+                    existingCoupons.Append(voucher);
+                    coupons.Insert(0,coupon); 
+                }
             }
+
+            _context.Vouchers.AddRange(newCoupons.AsEnumerable());
+            await _context.SaveChangesAsync();
+
             IEnumerable<string> couponsToReturn = coupons.AsEnumerable();
             return couponsToReturn;
         }
