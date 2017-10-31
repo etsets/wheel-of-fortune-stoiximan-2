@@ -21,8 +21,8 @@ namespace WheelOfFortune.Services
         public EmailSender()
         {
             host = "e-creativity.gr";
-            username = "info@e-creativity.gr";
-            password = "e5632411256E$";
+            username = "stoiximan@e-creativity.gr";
+            password = "stoiximan123";
 
             smtp = new SmtpClient();
             smtp.UseDefaultCredentials = false;
