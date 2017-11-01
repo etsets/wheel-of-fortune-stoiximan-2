@@ -1,0 +1,47 @@
+﻿
+@{
+     ViewData["Title"] = "Wheel Configuration";
+}
+
+<h2>Ajax Form</h2>
+
+<form id="json" name="json">
+     Wheel Configuration: <textarea class="form-control" rows="25" id="jsondata">@ViewData["Json"]</textarea><br>
+     <input type="submit" value="Submit" name="submit">
+</form>
+
+<div id="server-results"><!-- For server results --></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+     <script>
+  $(document).ready(function () {
+     $("#json").submit(function (event) {
+          event.preventDefault(); //prevent default action
+          //var post_url = "api/json"; //get form action url
+          //var request_method = $(this).attr("method"); //get form GET/POST method
+          //var form_data = $(this).serialize(); //Encode form elements for submission
+
+          $.ajax({
+               url: '/api/json',
+               type: 'POST',
+               data: $("#jsondata").val(),
+               dataType: 'json',
+               contentType: 'application/json',
+          }).done(function (response) { //
+               $("#server-results").html(response);
+               console.log('Entered done');
+
+          }).fail(function (response) { //
+               $("#server-results").html('fail');     
+               console.log('Entered fail');
+
+
+          });
+     });
+  });
+
+
+</script>
+

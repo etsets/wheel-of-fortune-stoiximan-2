@@ -14,13 +14,14 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WheelOfFortune.Admin.Controllers
 {
-    [Route("api/json")]
+    //[Route("api/json")]
      //[Authorize(Roles = "Administrators")]
-     public class WheelConfigController : Controller
+     public class WheelConfigurationController : Controller
     {
           // GET: api/json
           [HttpGet]
-        public object GetWheelConfig()
+          [Route("api/json")]
+          public object GetWheelConfig()
         {
                WheelConfig wheelconfig = new WheelConfig();
                return wheelconfig.GetWheelConfig();
@@ -28,13 +29,24 @@ namespace WheelOfFortune.Admin.Controllers
 
 
           // POST api/json
+          [Route("api/json")]
           [HttpPost]
-        public void PostWheelConfig([FromBody]JObject jsonObject)
+          //[Authorize(Roles = "Administrators")]
+          public void PostWheelConfig([FromBody]JObject jsonObject)
           {
+               //Console.WriteLine(jsonObject);
                WheelConfig wheelconfig = new WheelConfig();
                wheelconfig.PostWheelConfig(jsonObject);
           }
 
-          
+          //[Authorize(Roles = "Administrators")]
+          public IActionResult Index()
+          {
+
+               ViewData["Json"] = GetWheelConfig();
+               return View();
+          }
+
+
      }
 }
