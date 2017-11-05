@@ -17,17 +17,14 @@ namespace WheelOfFortune.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public PlayController(
             ApplicationDbContext context,
-          UserManager<ApplicationUser> userManager,
-          SignInManager<ApplicationUser> signInManager
+          UserManager<ApplicationUser> userManager
             )
         {
             _context = context;
             _userManager = userManager;
-            _signInManager = signInManager;
         }
         [Authorize]
           [ResponseCache(NoStore = true, Duration = 0)]
