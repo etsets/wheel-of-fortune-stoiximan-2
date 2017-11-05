@@ -1,0 +1,18 @@
+﻿@model IEnumerable<WheelOfFortune.Models.HistoryEntry>
+@{
+    ViewData["Title"] = "History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>History</h2>
+
+@foreach (var b in Model)
+{
+    <div>
+        
+            @Html.DisplayFor(modelItem => b.HistoryEntryId)
+            @Html.DisplayFor(modelItem => b.HistoryEntryTypeId)
+            @Html.DisplayFor(modelItem => b.TimeOccurred)
+        
+    </div>
+}
