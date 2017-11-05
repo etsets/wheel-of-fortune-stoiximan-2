@@ -9,3 +9,4 @@ packages/
 v14/
 *.mdf
 *.ldf
+sh.exe.stackdump

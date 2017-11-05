@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using WheelOfFortune.Models;
 using WheelOfFortune.Models.AccountViewModels;
 using WheelOfFortune.Services;
+using Microsoft.AspNetCore.Http;
+using WheelOfFortune.Extensions;
+using Microsoft.Extensions.Options;
+using System.Net.Http;
+using System.IO;
+using System.Net.Http.Headers;
 
 namespace WheelOfFortune.Controllers
 {
@@ -24,17 +27,22 @@ namespace WheelOfFortune.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        const string subscriptionKey = "face_api_key";
+        const string uriBase = "https://faceapi_url";
+        private readonly AzureStorageConfig storageConfig = null;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IOptions<AzureStorageConfig> config)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            storageConfig = config.Value;
         }
 
         [TempData]
@@ -235,26 +243,47 @@ namespace WheelOfFortune.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                model.Photo = DateTime.Now.Millisecond.ToString() + DateTime.Now.Second.ToString() + model.ActualPhoto.FileName;
+
+                using (Stream streamfile = model.ActualPhoto.OpenReadStream())
                 {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
-
-                         //Prevent newly registered users from being automatically logged on by commenting out the following line
-                         //await _signInManager.SignInAsync(user, isPersistent: false);
-                         _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    HttpClient client = new HttpClient();
+                    client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+                    string requestParameters = "visualFeatures=Categories,Description,Color&language=en";
+                    string uri = uriBase + "?" + requestParameters;
+                    HttpResponseMessage response;
+                    BinaryReader binaryReader = new BinaryReader(streamfile);
+                    byte[] byteData = binaryReader.ReadBytes((int)streamfile.Length);
+                    using (ByteArrayContent content = new ByteArrayContent(byteData))
+                    {
+                        bool isUploaded = false;
+                        content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                        response = await client.PostAsync(uri, content);
+                        string contentString = await response.Content.ReadAsStringAsync();
+                        if (contentString.Contains("faceId"))
+                        {
+                            //Guid guid = new Guid();
+                            isUploaded = await StorageHelper.UploadFileToStorage(model.ActualPhoto, model.Photo, storageConfig);
+                            var user = new ApplicationUser { Firstname = model.Firstname, Lastname = model.Lastname, Photo = "https://gypweufs01.blob.core.windows.net/faceapi/" + model.Photo, Birthdate = model.Birthdate.Date, UserName = model.Email, Email = model.Email };
+                            var result = await _userManager.CreateAsync(user, model.Password);
+                            _logger.LogInformation("User created a new account with password.");
+                            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                            var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                            await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                            _logger.LogInformation("User created a new account with password.");
+                            return RedirectToLocal(returnUrl);
+                        }
+                        else
+                        {
+                            return View(model);
+                        }
+                    }
                 }
-                AddErrors(result);
             }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            else
+            {
+                return View(model);
+            }
         }
 
         [HttpPost]

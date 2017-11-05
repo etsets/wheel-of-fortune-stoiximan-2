@@ -5,6 +5,10 @@
     <UserSecretsId>aspnet-WheelOfFortune-6F92138E-80B2-4298-8B2F-4DB7E441A912</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Controllers\ImagesController.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
