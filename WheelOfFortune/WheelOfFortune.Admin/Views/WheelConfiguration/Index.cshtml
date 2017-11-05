@@ -1,0 +1,49 @@
+﻿@{
+     ViewData["Title"] = "Wheel Configuration";
+}
+
+<h2>Ajax Form</h2>
+<form id="json" name="json">
+     Wheel Configuration: <textarea class="form-control" rows="25" id="jsondata">@Model </textarea><br>
+     <input type="submit" value="Submit" name="submit" class="btn btn-default">
+</form>
+
+<div id="server-results"><!-- For server results --></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+     <script>
+  $(document).ready(function () {
+     $("#json").submit(function (event) {
+          event.preventDefault(); 
+          
+
+          $.ajax({
+               url: '/api/json',
+               type: 'POST',
+               data: $("#jsondata").val(),
+               contentType: 'application/json',
+          }).done(function (response) { 
+               $("#server-results").addClass("alert alert-success fade in");
+               $("#server-results").html("Settings successfully uploaded");
+               console.log('Settings successfully uploaded');
+               
+          }).fail(function (response) { 
+               $("#server-results").addClass("alert alert-danger fade in");
+               $("#server-results").html("Error uploading the settings"); 
+               
+               console.log('Error uploading the settings');
+               
+          });
+
+          setTimeout(function () {
+               $("#server-results").html("");
+               $("#server-results").removeClass();
+          }, 3000);
+     });
+  });
+
+
+</script>
+
