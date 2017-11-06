@@ -15,17 +15,25 @@ using Microsoft.AspNetCore.Authorization;
 namespace WheelOfFortune.Admin.Controllers
 {
     //[Route("api/json")]
-     [Authorize(Roles = "Administrators")]
+     //[Authorize(Roles = "Administrators")]
      public class WheelConfigurationController : Controller
     {
+          private readonly IWheelConfig _wheelConfig;
+
+          public WheelConfigurationController(IWheelConfig wheelConfig)
+          {
+               _wheelConfig = wheelConfig;
+          }
+
+
           // GET: api/json
           [HttpGet]
           [Route("api/json")]
           [AllowAnonymous]
           public object GetWheelConfig()
         {
-               WheelConfig wheelconfig = new WheelConfig();
-               return wheelconfig.GetWheelConfig();
+               //WheelConfig wheelconfig = new WheelConfig();
+               return _wheelConfig.GetWheelConfig();
           }
 
 
@@ -34,15 +42,15 @@ namespace WheelOfFortune.Admin.Controllers
           [HttpPost]
           public void PostWheelConfig([FromBody]JObject jsonObject)
           {
-               WheelConfig wheelconfig = new WheelConfig();
-               wheelconfig.PostWheelConfig(jsonObject);
+               //WheelConfig wheelconfig = new WheelConfig();
+               _wheelConfig.PostWheelConfig(jsonObject);
           }
 
           public IActionResult Index()
           {
 
-               var json = GetWheelConfig();
-               return View(json);
+               //var json = GetWheelConfig();
+               return View(_wheelConfig.GetWheelConfig());
           }
 
 
