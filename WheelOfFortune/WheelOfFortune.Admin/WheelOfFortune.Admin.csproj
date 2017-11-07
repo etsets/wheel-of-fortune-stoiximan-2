@@ -7,9 +7,13 @@
 
   <ItemGroup>
     <Compile Remove="Models\NewFolder\**" />
+    <Compile Remove="Views\NewFolder\**" />
     <Content Remove="Models\NewFolder\**" />
+    <Content Remove="Views\NewFolder\**" />
     <EmbeddedResource Remove="Models\NewFolder\**" />
+    <EmbeddedResource Remove="Views\NewFolder\**" />
     <None Remove="Models\NewFolder\**" />
+    <None Remove="Views\NewFolder\**" />
   </ItemGroup>
 
 
@@ -27,6 +31,10 @@
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\_CouponScripts.cshtml" />
   </ItemGroup>
 
 </Project>
