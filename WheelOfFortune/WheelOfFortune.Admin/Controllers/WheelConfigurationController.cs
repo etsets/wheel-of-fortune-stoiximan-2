@@ -44,6 +44,7 @@ namespace WheelOfFortune.Admin.Controllers
           {
                //WheelConfig wheelconfig = new WheelConfig();
                _wheelConfig.PostWheelConfig(jsonObject);
+               
           }
 
           public IActionResult Index()

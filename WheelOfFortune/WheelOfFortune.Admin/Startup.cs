@@ -11,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using WheelOfFortune.Admin.Data;
 using WheelOfFortune.Admin.Models;
 using WheelOfFortune.Admin.Services;
-using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Cors;
 using WheelOfFortune.Admin.Classes.Interfaces;
 using WheelOfFortune.Admin.Classes.Implementations;

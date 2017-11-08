@@ -1,0 +1,221 @@
+﻿{
+  "definitions": {}, 
+  "$schema": "http://json-schema.org/draft-04/schema#", 
+  "type": "object", 
+  "id": "http://example.com/example.json", 
+  "required": [
+    "wheelID", 
+    "colorArray", 
+    "segmentValuesArray", 
+    "svgWidth", 
+    "svgHeight", 
+    "wheelStrokeColor", 
+    "wheelStrokeWidth", 
+    "wheelSize", 
+    "wheelTextOffsetY", 
+    "wheelTextColor", 
+    "wheelTextSize", 
+    "wheelImageOffsetY", 
+    "wheelImageSize", 
+    "centerCircleSize", 
+    "centerCircleStrokeColor", 
+    "centerCircleStrokeWidth", 
+    "centerCircleFillColor", 
+    "segmentStrokeColor", 
+    "segmentStrokeWidth", 
+    "centerX", 
+    "centerY", 
+    "hasShadows", 
+    "numSpins", 
+    "spinDestinationArray", 
+    "minSpinDuration", 
+    "gameOverText", 
+    "invalidSpinText", 
+    "introText", 
+    "hasSound", 
+    "gameId", 
+    "clickToSpin"
+  ], 
+  "properties": {
+    "wheelID": {
+      "type": "string", 
+      "id": "/properties/wheelID"
+    }, 
+    "colorArray": {
+      "type": "array", 
+      "id": "/properties/colorArray", 
+      "items": {
+        "type": "string", 
+        "id": "/properties/colorArray/items"
+      }
+    }, 
+    "segmentValuesArray": {
+      "type": "array", 
+      "id": "/properties/segmentValuesArray", 
+      "items": {
+        "type": "object", 
+        "id": "/properties/segmentValuesArray/items", 
+        "required": [
+          "probability", 
+          "type", 
+          "value", 
+          "win", 
+          "resultText", 
+          "userData"
+        ], 
+        "properties": {
+          "probability": {
+            "type": "integer", 
+            "id": "/properties/segmentValuesArray/items/properties/probability"
+          }, 
+          "type": {
+            "type": "string", 
+            "id": "/properties/segmentValuesArray/items/properties/type"
+          }, 
+          "value": {
+            "type": "string", 
+            "id": "/properties/segmentValuesArray/items/properties/value"
+          }, 
+          "win": {
+            "type": "boolean", 
+            "id": "/properties/segmentValuesArray/items/properties/win"
+          }, 
+          "resultText": {
+            "type": "string", 
+            "id": "/properties/segmentValuesArray/items/properties/resultText"
+          }, 
+          "userData": {
+            "type": "object", 
+            "id": "/properties/segmentValuesArray/items/properties/userData", 
+            "required": [
+              "score"
+            ], 
+            "properties": {
+              "score": {
+                "type": "number", 
+                "id": "/properties/segmentValuesArray/items/properties/userData/properties/score"
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "svgWidth": {
+      "type": "integer", 
+      "id": "/properties/svgWidth"
+    }, 
+    "svgHeight": {
+      "type": "integer", 
+      "id": "/properties/svgHeight"
+    }, 
+    "wheelStrokeColor": {
+      "type": "string", 
+      "id": "/properties/wheelStrokeColor"
+    }, 
+    "wheelStrokeWidth": {
+      "type": "integer", 
+      "id": "/properties/wheelStrokeWidth"
+    }, 
+    "wheelSize": {
+      "type": "integer", 
+      "id": "/properties/wheelSize"
+    }, 
+    "wheelTextOffsetY": {
+      "type": "integer", 
+      "id": "/properties/wheelTextOffsetY"
+    }, 
+    "wheelTextColor": {
+      "type": "string", 
+      "id": "/properties/wheelTextColor"
+    }, 
+    "wheelTextSize": {
+      "type": "string", 
+      "id": "/properties/wheelTextSize"
+    }, 
+    "wheelImageOffsetY": {
+      "type": "integer", 
+      "id": "/properties/wheelImageOffsetY"
+    }, 
+    "wheelImageSize": {
+      "type": "integer", 
+      "id": "/properties/wheelImageSize"
+    }, 
+    "centerCircleSize": {
+      "type": "integer", 
+      "id": "/properties/centerCircleSize"
+    }, 
+    "centerCircleStrokeColor": {
+      "type": "string", 
+      "id": "/properties/centerCircleStrokeColor"
+    }, 
+    "centerCircleStrokeWidth": {
+      "type": "integer", 
+      "id": "/properties/centerCircleStrokeWidth"
+    }, 
+    "centerCircleFillColor": {
+      "type": "string", 
+      "id": "/properties/centerCircleFillColor"
+    }, 
+    "segmentStrokeColor": {
+      "type": "string", 
+      "id": "/properties/segmentStrokeColor"
+    }, 
+    "segmentStrokeWidth": {
+      "type": "integer", 
+      "id": "/properties/segmentStrokeWidth"
+    }, 
+    "centerX": {
+      "type": "integer", 
+      "id": "/properties/centerX"
+    }, 
+    "centerY": {
+      "type": "integer", 
+      "id": "/properties/centerY"
+    }, 
+    "hasShadows": {
+      "type": "boolean", 
+      "id": "/properties/hasShadows"
+    },
+    "numSpins": {
+      "type": "integer",
+      "id": "/properties/numSpins"
+    }, 
+    "spinDestinationArray": {
+      "type": "array", 
+      "id": "/properties/spinDestinationArray", 
+      "items": {
+        "id": "syrianbear", 
+        "title": "Empty Object", 
+        "description": "This accepts anything, as long as it's valid JSON."
+      }
+    }, 
+    "minSpinDuration": {
+      "type": "integer", 
+      "id": "/properties/minSpinDuration"
+    }, 
+    "gameOverText": {
+      "type": "string", 
+      "id": "/properties/gameOverText"
+    }, 
+    "invalidSpinText": {
+      "type": "string", 
+      "id": "/properties/invalidSpinText"
+    }, 
+    "introText": {
+      "type": "string", 
+      "id": "/properties/introText"
+    }, 
+    "hasSound": {
+      "type": "boolean", 
+      "id": "/properties/hasSound"
+    }, 
+    "gameId": {
+      "type": "string", 
+      "id": "/properties/gameId"
+    }, 
+    "clickToSpin": {
+      "type": "boolean", 
+      "id": "/properties/clickToSpin"
+    }
+  }
+}
