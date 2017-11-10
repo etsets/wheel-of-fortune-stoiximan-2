@@ -6,13 +6,39 @@
 
 <h2>History</h2>
 
-@foreach (var b in Model)
-{
-    <div>
-        
-            @Html.DisplayFor(modelItem => b.HistoryEntryId)
-            @Html.DisplayFor(modelItem => b.HistoryEntryTypeId)
-            @Html.DisplayFor(modelItem => b.TimeOccurred)
-        
-    </div>
-}
+<table class="table">
+
+    <tr>
+        <th>
+        </th>
+        <th>
+            Id
+        </th>
+        <th>
+            Type
+        </th>
+        <th>
+            Time
+        </th>
+    </tr>
+
+    @foreach (var b in Model)
+    {
+
+        <tr>
+        <td>
+            @Html.ActionLink("Details", "SpinHistory", new { hid = b.HistoryEntryId, type = b.HistoryEntryTypeId })
+        </td>
+        <td>
+            @b.HistoryEntryId
+        </td>
+        <td>
+            @b.HistoryEntryTypeId
+        </td>
+        <td>
+            @b.TimeOccurred
+        </td>
+        </tr>
+    }
+
+</table> 

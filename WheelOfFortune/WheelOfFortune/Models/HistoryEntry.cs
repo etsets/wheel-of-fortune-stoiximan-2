@@ -26,5 +26,6 @@ namespace WheelOfFortune.Models
 
         [Required]
         public EntryType HistoryEntryTypeId { get; set; }
+        
     }
 }

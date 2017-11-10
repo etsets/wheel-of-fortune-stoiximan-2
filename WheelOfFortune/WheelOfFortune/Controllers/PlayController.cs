@@ -33,15 +33,43 @@ namespace WheelOfFortune.Controllers
             return View();
         }
 
-        public async Task<IActionResult> History()
+        public async Task<IActionResult> DepositHistory()
         {
             var user = await _userManager.GetUserAsync(User);
 
-            var entries = await _context.HistoryEntries
-                .Where(h => h.CreatedBy.Equals(user.Id))
+            var depositentries = await _context.HistoryEntries
+                .Where(h => h.CreatedBy.Equals(user.Id) && h.HistoryEntryTypeId.Equals(2))
                 .ToListAsync();
-            
-            return View(entries);
+            return View(depositentries);
+        }
+                public async Task<IActionResult> SpinHistory()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var spinentries = await _context.HistoryEntries
+                .Where(h => h.CreatedBy.Equals(user.Id) && h.HistoryEntryTypeId.Equals(1))
+                .ToListAsync();
+            return View(spinentries);
+        }
+
+        public async Task<IActionResult> SpinDetails(int hid)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var spindetails = await _context.SpinEntries
+                .Where(s => s.HistoryEntryId.Equals(hid))
+                .FirstOrDefaultAsync();
+            return View(spindetails);
+        }
+
+        public async Task<IActionResult> DepositDetails(int hid)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var depositdetails = await _context.SpinEntries
+                .Where(s => s.HistoryEntryId.Equals(hid))
+                .FirstOrDefaultAsync();
+            return View(depositdetails);
         }
 
     }
