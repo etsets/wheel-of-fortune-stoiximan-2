@@ -35,6 +35,7 @@ namespace WheelOfFortune.Admin
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+               
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
@@ -79,7 +80,7 @@ namespace WheelOfFortune.Admin
             app.UseStaticFiles();
 
             app.UseAuthentication();
-
+               
 
                
 
