@@ -7,6 +7,11 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\ImagesController.cs" />
+    <Compile Remove="Models\DetailsEntry.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Play\SpinDetails.cshtml" />
   </ItemGroup>
 
 
