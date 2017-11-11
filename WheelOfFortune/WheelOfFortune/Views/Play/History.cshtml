@@ -21,13 +21,18 @@
             Time
         </th>
     </tr>
-
+    
     @foreach (var b in Model)
     {
 
         <tr>
         <td>
-            @Html.ActionLink("Details", "SpinHistory", new { hid = b.HistoryEntryId, type = b.HistoryEntryTypeId })
+            @if (@b.HistoryEntryTypeId.Equals(HistoryEntry.EntryType.Spin)){
+            @Html.ActionLink("Details", "SpinDetails", new { hid = b.HistoryEntryId})
+            }else
+            {
+            @Html.ActionLink("Details", "DepositDetails", new { hid = b.HistoryEntryId})
+            }
         </td>
         <td>
             @b.HistoryEntryId

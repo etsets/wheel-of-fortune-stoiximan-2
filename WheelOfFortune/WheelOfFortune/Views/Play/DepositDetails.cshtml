@@ -1,0 +1,45 @@
+﻿@model WheelOfFortune.Models.DepositEntry
+@{
+    ViewData["Title"] = "DepositDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Deposit Details</h2>
+
+
+<table class="table">
+
+    <tr>
+        @*<th>
+            Id
+        </th>*@
+        <th>
+            Voucher Id
+        </th>
+        <th>
+            Credits
+        </th>
+        <th>
+            Voucher Code
+        </th>
+    </tr>
+
+    
+
+        <tr>
+            @*<td>
+                @Model.HistoryEntryId
+            </td>*@
+            <td>
+                @Model.VoucherId
+            </td>
+            <td>
+                @Model.BelongsToVoucherEntry.CreditAmount
+            </td>
+            <td>
+                @Model.BelongsToVoucherEntry.VoucherCode
+            </td>
+        </tr>
+    
+
+</table> 

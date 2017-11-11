@@ -1,8 +1,46 @@
-﻿
+﻿@model WheelOfFortune.Models.SpinEntry
 @{
     ViewData["Title"] = "SpinDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>SpinDetails</h2>
+<h2>Spin Details</h2>
 
+
+
+<table class="table">
+
+    <tr>
+        @*<th>
+                Id
+            </th>*@
+        <th>
+            Voucher Id
+        </th>
+        <th>
+            Credits
+        </th>
+        <th>
+            Voucher Code
+        </th>
+    </tr>
+
+
+
+    <tr>
+        @*<td>
+                @Model.HistoryEntryId
+            </td>*@
+        <td>
+            @Model.HistoryEntryId
+        </td>
+        <td>
+            @Model.BetAmount
+        </td>
+        <td>
+            @Model.ResultAmount
+        </td>
+    </tr>
+
+
+</table> 
