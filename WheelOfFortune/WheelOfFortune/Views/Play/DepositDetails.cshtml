@@ -7,39 +7,30 @@
 <h2>Deposit Details</h2>
 
 
-<table class="table">
-
+<table style="width:100%;" class="table">
     <tr>
-        @*<th>
-            Id
-        </th>*@
         <th>
             Voucher Id
         </th>
         <th>
-            Credits
-        </th>
-        <th>
             Voucher Code
         </th>
+        <th>
+            Credits
+        </th>
     </tr>
-
-    
-
         <tr>
-            @*<td>
-                @Model.HistoryEntryId
-            </td>*@
-            <td>
+            <td>&nbsp;
                 @Model.VoucherId
             </td>
-            <td>
-                @Model.BelongsToVoucherEntry.CreditAmount
-            </td>
-            <td>
+            <td>&nbsp;
                 @Model.BelongsToVoucherEntry.VoucherCode
             </td>
+            <td>&nbsp;
+                @Model.BelongsToVoucherEntry.CreditAmount
+            </td>
         </tr>
-    
-
 </table> 
+<div>
+    <input type="button" class="btn btn-info" value="Back to History" onclick="location.href='@Url.Action("History", "Play")'" />
+</div>

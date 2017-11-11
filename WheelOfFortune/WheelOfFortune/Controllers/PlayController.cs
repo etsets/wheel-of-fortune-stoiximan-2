@@ -39,29 +39,11 @@ namespace WheelOfFortune.Controllers
 
             var entries = await _context.HistoryEntries
                 .Where(h => h.CreatedBy.Equals(user.Id))
+                .OrderBy(h => h.TimeOccurred)
                 .ToListAsync();
             return View(entries);
         }
-
-        //public async Task<IActionResult> DepositHistory()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-        //    var depositentries = await _context.HistoryEntries
-        //        .Where(h => h.CreatedBy.Equals(user.Id) && h.HistoryEntryTypeId.Equals("Deposit"))
-        //        .ToListAsync();
-        //    return View(depositentries);
-        //}
-        //public async Task<IActionResult> SpinHistory()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);
-
-        //    var spinentries = await _context.HistoryEntries
-        //        .Where(h => h.CreatedBy.Equals(user.Id) && h.HistoryEntryTypeId.Equals("Spin"))
-        //        .Where(h => h.CreatedBy.Equals(user.Id))
-        //        .ToListAsync();
-        //    return View(spinentries);
-        //}
-
+        
         public async Task<IActionResult> SpinDetails(int hid)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -78,9 +60,9 @@ namespace WheelOfFortune.Controllers
             var user = await _userManager.GetUserAsync(User);
 
             var depositdetails = await _context.DepositEntries
-                .Where(s => s.HistoryEntryId.Equals(hid))
-                .Include(s => s.BelongsToHistoryEntry)
-                .Include( s => s.BelongsToVoucherEntry)
+                .Where(d => d.HistoryEntryId.Equals(hid))
+                .Include(d => d.BelongsToHistoryEntry)
+                .Include( d => d.BelongsToVoucherEntry)
                 .FirstOrDefaultAsync();
             return View(depositdetails);
         }

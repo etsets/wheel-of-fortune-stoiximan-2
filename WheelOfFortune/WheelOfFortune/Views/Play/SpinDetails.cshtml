@@ -8,39 +8,30 @@
 
 
 
-<table class="table">
-
+<table style="width:100%;" class="table">
     <tr>
-        @*<th>
-                Id
-            </th>*@
         <th>
-            Voucher Id
+            Id
         </th>
         <th>
-            Credits
+            Bet Amount
         </th>
         <th>
-            Voucher Code
+            Result Amount
         </th>
     </tr>
-
-
-
     <tr>
-        @*<td>
-                @Model.HistoryEntryId
-            </td>*@
-        <td>
+        <td>&nbsp;
             @Model.HistoryEntryId
         </td>
-        <td>
+        <td>&nbsp;
             @Model.BetAmount
         </td>
-        <td>
+        <td>&nbsp;
             @Model.ResultAmount
         </td>
     </tr>
-
-
 </table> 
+<div>
+    <input type="button" class="btn btn-info" value="Back to History" onclick="location.href='@Url.Action("History", "Play")'" />
+</div>
