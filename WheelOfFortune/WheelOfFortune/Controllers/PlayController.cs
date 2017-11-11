@@ -32,7 +32,7 @@ namespace WheelOfFortune.Controllers
         {
             return View();
         }
-
+        [Authorize]
         public async Task<IActionResult> History()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -43,7 +43,7 @@ namespace WheelOfFortune.Controllers
                 .ToListAsync();
             return View(entries);
         }
-        
+        [Authorize]
         public async Task<IActionResult> SpinDetails(int hid)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -54,7 +54,7 @@ namespace WheelOfFortune.Controllers
                 .FirstOrDefaultAsync();
             return View(spindetails);
         }
-
+        [Authorize]
         public async Task<IActionResult> DepositDetails(int hid)
         {
             var user = await _userManager.GetUserAsync(User);
