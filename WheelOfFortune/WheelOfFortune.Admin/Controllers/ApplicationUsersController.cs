@@ -89,6 +89,55 @@ namespace WheelOfFortune.Admin.Controllers
 
             return View(applicationUser);
         }
+        
+        public async Task<IActionResult> History(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var historyUser = await _context.HistoryEntries
+                .Where(h => h.CreatedBy.Equals(id))
+                .ToListAsync();
+            if (historyUser == null)
+            {
+                return NotFound();
+            }
+
+            return View(historyUser);
+        }
+        
+        public async Task<IActionResult> SpinDetails(int hid)
+        {
+            if (hid == null)
+            {
+                return NotFound();
+            }
+
+            var spindetails = await _context.SpinEntries
+                .Where(s => s.HistoryEntryId.Equals(hid))
+                .Include(s => s.BelongsToHistoryEntry)
+                .FirstOrDefaultAsync();
+            
+            return View(spindetails);
+        }
+        
+        public async Task<IActionResult> DepositDetails(int hid)
+        {
+            if (hid == null)
+            {
+                return NotFound();
+            }
+
+            var depositdetails = await _context.DepositEntries
+                .Where(d => d.HistoryEntryId.Equals(hid))
+                .Include(d => d.BelongsToHistoryEntry)
+                .Include(d => d.BelongsToVoucherEntry)
+                .FirstOrDefaultAsync();
+
+            return View(depositdetails);
+        }
 
         // GET: ApplicationUsers/Create
         public IActionResult Create()
