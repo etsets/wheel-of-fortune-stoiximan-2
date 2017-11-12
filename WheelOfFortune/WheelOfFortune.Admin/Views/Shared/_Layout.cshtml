@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<ApplicationUser> SignInManager
+
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -31,9 +34,15 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                     <li><a asp-area="" asp-controller="" asp-action="">Placeholder</a></li>
+
+@if (SignInManager.IsSignedIn(User))
+{
+                    <li><a asp-area="" asp-controller="WheelConfiguration" asp-action="Index">Wheel Configuration</a></li>
                     <li><a asp-area="" asp-controller="ApplicationUsers" asp-action="Index">Users Control Panel</a></li>
+                     <li><a asp-area="" asp-controller="" asp-action="">Placeholder</a></li>
+}
+
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

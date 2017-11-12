@@ -11,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using WheelOfFortune.Admin.Data;
 using WheelOfFortune.Admin.Models;
 using WheelOfFortune.Admin.Services;
-using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Cors;
 using WheelOfFortune.Admin.Classes.Interfaces;
 using WheelOfFortune.Admin.Classes.Implementations;
@@ -36,9 +35,11 @@ namespace WheelOfFortune.Admin
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+               
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+               services.AddTransient<IWheelConfig, WheelConfig>();
 
             services.AddMvc();
 
@@ -49,7 +50,7 @@ namespace WheelOfFortune.Admin
                //});
 
                //Add Cross-origin resource sharing to avoid problems calling localhost resources from localhost
-               //services.AddCors();
+               services.AddCors();
 
           }
 
@@ -62,8 +63,16 @@ namespace WheelOfFortune.Admin
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
                 app.UseDatabaseErrorPage();
-            }
-            else
+
+                    //Shows UseCors with CorsPolicyBuilder.
+                    app.UseCors(builder =>
+                       builder.WithOrigins("*") //Use these settings for localhost testing only
+                       .AllowAnyHeader()
+                       );
+
+
+               }
+               else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
@@ -71,21 +80,9 @@ namespace WheelOfFortune.Admin
             app.UseStaticFiles();
 
             app.UseAuthentication();
+               
 
-               //Enable middleware to serve generated Swagger as a JSON endpoint.
-               //app.UseSwagger();
-
-               //Enable middleware to serve swagger - ui(HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-               //app.UseSwaggerUI(c =>
-               //{
-               //     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-               //});
-
-               //Shows UseCors with CorsPolicyBuilder.
-               //app.UseCors(builder =>
-               //   builder.WithOrigins("*") //Use these settings for localhost testing only
-               //   .AllowAnyHeader()
-               //   );
+               
 
                app.UseMvc(routes =>
             {
