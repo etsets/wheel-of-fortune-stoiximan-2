@@ -110,12 +110,7 @@ namespace WheelOfFortune.Admin.Controllers
         
         public async Task<IActionResult> SpinDetails(int hid)
         {
-            if (hid == null)
-            {
-                return NotFound();
-            }
-
-            var spindetails = await _context.SpinEntries
+                 var spindetails = await _context.SpinEntries
                 .Where(s => s.HistoryEntryId.Equals(hid))
                 .Include(s => s.BelongsToHistoryEntry)
                 .FirstOrDefaultAsync();
@@ -125,12 +120,7 @@ namespace WheelOfFortune.Admin.Controllers
         
         public async Task<IActionResult> DepositDetails(int hid)
         {
-            if (hid == null)
-            {
-                return NotFound();
-            }
-
-            var depositdetails = await _context.DepositEntries
+             var depositdetails = await _context.DepositEntries
                 .Where(d => d.HistoryEntryId.Equals(hid))
                 .Include(d => d.BelongsToHistoryEntry)
                 .Include(d => d.BelongsToVoucherEntry)
