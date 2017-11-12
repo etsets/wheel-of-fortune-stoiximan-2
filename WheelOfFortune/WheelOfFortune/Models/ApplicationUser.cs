@@ -32,6 +32,6 @@ namespace WheelOfFortune.Models
         public DateTime? LastLogin { get; set; }
 
         [Required]
-        public float Balance { get; set; }
-    }
+        public float Balance { get; set; } = 100.0F;
+     }
 }
