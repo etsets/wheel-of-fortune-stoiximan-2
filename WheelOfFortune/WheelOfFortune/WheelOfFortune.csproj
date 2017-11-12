@@ -10,10 +10,6 @@
     <Compile Remove="Models\DetailsEntry.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Remove="Views\Play\SpinDetails.cshtml" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
