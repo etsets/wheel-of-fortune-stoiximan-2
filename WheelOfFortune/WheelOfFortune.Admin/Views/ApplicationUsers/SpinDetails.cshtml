@@ -1,4 +1,4 @@
-﻿@model WheelOfFortune.Models.SpinEntry
+﻿@model WheelOfFortune.Admin.Models.SpinEntry
 @{
     ViewData["Title"] = "SpinDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -21,17 +21,20 @@
         </th>
     </tr>
     <tr>
-        <td>&nbsp;
+        <td>
+            &nbsp;
             @Model.HistoryEntryId
         </td>
-        <td>&nbsp;
+        <td>
+            &nbsp;
             @Model.BetAmount
         </td>
-        <td>&nbsp;
+        <td>
+            &nbsp;
             @Model.ResultAmount
         </td>
     </tr>
-</table> 
+</table>
 <div>
-    <input type="button" class="btn btn-default" value="Back to History" onclick="location.href='@Url.Action("History", "Play")'" />
+    <input type="button" class="btn btn-default" value="Back to Users" onclick="location.href='@Url.Action("Index", "ApplicationUsers")'" />
 </div>
