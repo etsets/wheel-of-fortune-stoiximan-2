@@ -49,7 +49,7 @@ namespace WheelOfFortune.Admin
                //});
 
                //Add Cross-origin resource sharing to avoid problems calling localhost resources from localhost
-               //services.AddCors();
+               services.AddCors();
 
           }
 
@@ -82,12 +82,12 @@ namespace WheelOfFortune.Admin
                //});
 
                //Shows UseCors with CorsPolicyBuilder.
-               //app.UseCors(builder =>
-               //   builder.WithOrigins("*") //Use these settings for localhost testing only
-               //   .AllowAnyHeader()
-               //   );
+               app.UseCors(builder =>
+                  builder.WithOrigins("*") //Use these settings for localhost testing only
+                  .AllowAnyHeader()
+                  );
 
-               app.UseMvc(routes =>
+            app.UseMvc(routes =>
             {
                  routes.MapRoute(
                         name: "default",

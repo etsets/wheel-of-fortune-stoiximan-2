@@ -5,8 +5,8 @@ function loadJSON(callback) {
 
   var xobj = new XMLHttpRequest();
   xobj.overrideMimeType("application/json");
-  xobj.open('GET', 'https://localhost:44366/wheel_data_1.json', true); 
-  //xobj.open('GET', 'GetWheelPlay', true); //ok..
+  xobj.open('GET', 'https://localhost:44335/api/json', true); 
+  //xobj.open('GET', 'WheelGame/GetWheelPlay', true); //ok..
   //xobj.send();
   xobj.onreadystatechange = function() {
     if (xobj.readyState == 4 && xobj.status == "200") {
@@ -31,8 +31,10 @@ function myResult(e) {
 
       //var userdata = { score: '3.5' };
       //var params = "{userdata:" + JSON.stringify(userdata) + "}";
-      var userdata = e;
-      var params = JSON.stringify(e);
+      //var userdata = e;
+      var amount = $('#BetAmount').val();
+      var result = { spinResult: e, betAmount: amount };
+      var params = JSON.stringify(result);
       http.open('POST', url, true); //true
       http.setRequestHeader("content-type", "application/json;charset=utf-8");
       http.onreadystatechange = function () {

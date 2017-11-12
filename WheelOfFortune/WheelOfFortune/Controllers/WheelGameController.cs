@@ -24,14 +24,18 @@ namespace WheelOfFortune.Controllers
     public class WheelGameController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public WheelGameController(ApplicationDbContext context)
+        public WheelGameController(ApplicationDbContext context,
+                                   UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
+            _context.Database.EnsureCreated();
             var wheelGames = await _context.Wheels.ToListAsync();
             return View(wheelGames);
         }
@@ -40,6 +44,7 @@ namespace WheelOfFortune.Controllers
         [HttpGet]
         public async Task<IActionResult> Play(string id)
         {
+            _context.Database.EnsureCreated();
             int numericWheelId;
             if (id == null || !(int.TryParse(id, out numericWheelId)))
             {
@@ -60,22 +65,74 @@ namespace WheelOfFortune.Controllers
         [HttpGet]
         public JsonResult GetWheelPlay()
         {
-            StreamReader sr = new StreamReader("wheel_data_1.json");
-            string result = sr.ReadToEnd();
-            result=result.Replace("\r\n", "");
-            result = result.Replace("\\\\", "");
-            return Json(result);
+            //CreatedAtRoute("GetTodo", new { id = item.Id }, item);
+
+            return Json("{}");
         }
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public JsonResult Spin([FromBody]JObject userdata)
+        //Task<IActionResult>
+        //public JsonResult Spin([FromBody]JObject userdata)
+        public async Task<IActionResult> Spin([FromBody]JObject userdata)
         {
-            StreamReader sr = new StreamReader("wheel_data_1.json");
+            var curUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            /*var newHistoryEntry = new HistoryEntry()
+            {
+                CreatedBy = curUser,
+                TimeOccurred = DateTime.Now,
+                HistoryEntryTypeId = HistoryEntry.EntryType.Spin
+            };*/
+
+            JToken st1 = userdata["spinResult"]["userData"]["score"];
+            JToken st2 = userdata["betAmount"];
+
+            //userData score
+            double score = Convert.ToDouble(st1.ToString());
+            double moneyBet = Convert.ToDouble(st2.ToString());
+            double finalAmount = (moneyBet * score);
+            var newSpinEntry = new SpinEntry()
+            {
+                BetAmount = (float)moneyBet,
+                ResultAmount = (float)(finalAmount),
+                BelongsToHistoryEntry = new HistoryEntry()
+                {
+                    CreatedBy = curUser,
+                    TimeOccurred = DateTime.Now,
+                    HistoryEntryTypeId = HistoryEntry.EntryType.Spin
+                }
+            };
+
+            _context.Add(newSpinEntry);
+            _context.SaveChanges();
+
+            var gamerToUpdate = await _context.Gamers.SingleOrDefaultAsync(s => s.Id == curUser.Id);
+            gamerToUpdate.Balance += (float)finalAmount;
+            if (await TryUpdateModelAsync<ApplicationUser>(gamerToUpdate))
+            {
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    //return View();
+                    //return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException)
+                {
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Failed to save balance and spin result. ");
+                }
+            }
+
+
+            return View();
+
+            //return Json("{}");
+            /*StreamReader sr = new StreamReader("wheel_data_1.json");
             string result = sr.ReadToEnd();
             result = result.Replace("\r\n", "");
             result = result.Replace("\\\\", "");
-            return Json(result);
+            return Json(result);*/
         }
     }
 }

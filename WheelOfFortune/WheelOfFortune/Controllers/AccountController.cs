@@ -27,8 +27,8 @@ namespace WheelOfFortune.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
-        const string subscriptionKey = "face_api_key";
-        const string uriBase = "https://faceapi_url";
+        const string subscriptionKey = "7acca518d1b141db9f629c30c8a424af";
+        const string uriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
         private readonly AzureStorageConfig storageConfig = null;
 
         public AccountController(
@@ -69,7 +69,7 @@ namespace WheelOfFortune.Controllers
             {
 
                     // Require the user to have a confirmed email before they can log on.
-                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    /*var user = await _userManager.FindByEmailAsync(model.Email);
                     if (user != null)
                     {
                          if (!await _userManager.IsEmailConfirmedAsync(user))
@@ -78,7 +78,7 @@ namespace WheelOfFortune.Controllers
                                             "You must have a confirmed email to log in.");
                               return View(model);
                          }
-                    }
+                    }*/
 
 
 
