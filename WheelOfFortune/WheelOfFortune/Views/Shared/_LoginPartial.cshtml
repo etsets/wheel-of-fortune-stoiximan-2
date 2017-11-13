@@ -18,19 +18,18 @@
             </li>
             <li>
                 @{
-                    ApplicationUser currentUser = UserManager.Users.SingleOrDefault(u => u.UserName == (UserManager.GetUserName(User)));
+                    var balanceValue = 0.0;
+                    if (Model != null)
+                    {
+                        balanceValue = Model.Balance;
+                    }
+                    else
+                    {
+                        ApplicationUser currentUser = UserManager.Users.SingleOrDefault(u => u.UserName == (UserManager.GetUserName(User)));
+                        balanceValue = currentUser.Balance;
+                    }
                 }
-                Your balance is: @currentUser.Balance
-            </li>
-            <li>
-                @if (Model != null)
-                {
-                    <div id="dvCategoryResults">
-                        Model.Balance
-                    </div>
-                };
-
-                
+                Your balance is:@balanceValue
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>

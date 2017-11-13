@@ -129,9 +129,9 @@ namespace WheelOfFortune.Controllers
                 }
             }
 
-
-            return View();
-            //return PartialView("Login", curUser);
+            
+            //return View(newSpinEntry);
+            return PartialView("_LoginPartial", curUser);
 
             //BalanceViewComponent comp = new BalanceViewComponent(_context, _userManager);
             //return await comp.InvokeAsync();

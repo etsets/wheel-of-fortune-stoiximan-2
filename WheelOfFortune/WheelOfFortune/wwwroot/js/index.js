@@ -40,8 +40,21 @@ function myResult(e) {
       http.setRequestHeader("content-type", "application/json;charset=utf-8");
       http.onreadystatechange = function () {
           if (http.readyState == 4 && http.status == 200) {
+              //var rt = http.responseText;
               //alert(http.responseText);
-              $("#dvCategoryResults").load('@(Url.Action("GetUpdatedBalance","WheelGame",null, Request.Url.Scheme))');
+              //$("#dvCategoryResults").load('@(Url.Action("GetUpdatedBalance","WheelGame",null, Request.Url.Scheme))');
+              var newContent = $.parseHTML(http.responseText);
+              //var newForm = newContent.find('form');
+              for (var i= 0; i < newContent.length;++i)
+              {
+                  if (newContent[i].id == "logoutForm")
+                  {
+                      $('#logoutForm').html(newContent[i].innerHTML);
+                      //$('#logoutForm').html();
+                  }
+              }
+              //$('#logoutForm').html(http.responseText);
+              //document.getElementById("logoutForm").innerHTML =
           }
       }
       http.send(params);
