@@ -51,8 +51,9 @@ namespace WheelOfFortune
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+               services.Configure<AuthMessageSenderOptions>(Configuration);
 
-            services.AddMvc();
+               services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,5 +81,7 @@ namespace WheelOfFortune
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
-    }
+
+          
+     }
 }

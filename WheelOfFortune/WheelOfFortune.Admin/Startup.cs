@@ -39,6 +39,7 @@ namespace WheelOfFortune.Admin
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+               services.Configure<AuthMessageSenderOptions>(Configuration);
                services.AddTransient<IWheelConfig, WheelConfig>();
 
             services.AddMvc();
