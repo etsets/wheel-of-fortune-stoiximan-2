@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WheelOfFortune.Additionals;
 using WheelOfFortune.Data;
 using WheelOfFortune.Models;
 using WheelOfFortune.Services;
@@ -54,6 +55,7 @@ namespace WheelOfFortune
 
             services.AddMvc();
             services.AddCors();
+            //services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,6 +75,11 @@ namespace WheelOfFortune
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            /*app.UseSignalR(routes =>
+            {
+                routes.MapHub<UserBalanceUpdated>("userbalanceupdated");
+            });*/
 
             app.UseCors(builder =>
                   builder.WithOrigins("*") //Use these settings for localhost testing only

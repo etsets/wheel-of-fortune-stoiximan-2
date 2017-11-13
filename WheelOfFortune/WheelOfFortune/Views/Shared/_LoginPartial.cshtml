@@ -7,6 +7,8 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject ApplicationDbContext DbContext
 
+@model WheelOfFortune.Models.ApplicationUser
+
 @if (SignInManager.IsSignedIn(User))
 {
     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
@@ -15,15 +17,20 @@
                 <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
             </li>
             <li>
-                @{ 
-                    ApplicationUser currentUser = UserManager.Users.First(u => u.UserName == (UserManager.GetUserName(User)));
+                @{
+                    ApplicationUser currentUser = UserManager.Users.SingleOrDefault(u => u.UserName == (UserManager.GetUserName(User)));
                 }
                 Your balance is: @currentUser.Balance
             </li>
             <li>
-                <div>
-                    @await Component.InvokeAsync("Balance")
-                </div>
+                @if (Model != null)
+                {
+                    <div id="dvCategoryResults">
+                        Model.Balance
+                    </div>
+                };
+
+                
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using WheelOfFortune.Models;
 using WheelOfFortune.Additionals;
+using WheelOfFortune.ViewComponents;
 using System.Text;
 
 namespace WheelOfFortune.Controllers
@@ -42,9 +44,9 @@ namespace WheelOfFortune.Controllers
 
         // GET: WheelGame/Play/5
         [HttpGet]
-        public async Task<IActionResult> Play(string id)
+        public async Task<IActionResult> Play()//string id
         {
-            _context.Database.EnsureCreated();
+            /*_context.Database.EnsureCreated();
             int numericWheelId;
             if (id == null || !(int.TryParse(id, out numericWheelId)))
             {
@@ -55,7 +57,7 @@ namespace WheelOfFortune.Controllers
             if (selectedWheel == null)
             {
                 return NotFound();
-            }
+            }*/
 
             return View();
         }
@@ -72,7 +74,7 @@ namespace WheelOfFortune.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        //Task<IActionResult>
+        //async Task<IActionResult>
         //public JsonResult Spin([FromBody]JObject userdata)
         public async Task<IActionResult> Spin([FromBody]JObject userdata)
         {
@@ -107,7 +109,10 @@ namespace WheelOfFortune.Controllers
             _context.Add(newSpinEntry);
             _context.SaveChanges();
 
+             
+
             var gamerToUpdate = await _context.Gamers.SingleOrDefaultAsync(s => s.Id == curUser.Id);
+            double oldBalance = gamerToUpdate.Balance;
             gamerToUpdate.Balance += (float)finalAmount;
             if (await TryUpdateModelAsync<ApplicationUser>(gamerToUpdate))
             {
@@ -126,6 +131,10 @@ namespace WheelOfFortune.Controllers
 
 
             return View();
+            //return PartialView("Login", curUser);
+
+            //BalanceViewComponent comp = new BalanceViewComponent(_context, _userManager);
+            //return await comp.InvokeAsync();
 
             //return Json("{}");
             /*StreamReader sr = new StreamReader("wheel_data_1.json");
@@ -134,5 +143,17 @@ namespace WheelOfFortune.Controllers
             result = result.Replace("\\\\", "");
             return Json(result);*/
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetUpdatedBalance()
+        {
+            var curUser = await _userManager.GetUserAsync(HttpContext.User);
+            return PartialView("_LoginPartial", curUser);
+        }
+
+        /*public async Task<IActionResult> GetUpdatedBalance()
+        {
+            var curUser = await _userManager.GetUserAsync(HttpContext.User);
+        }*/
     }
 }
