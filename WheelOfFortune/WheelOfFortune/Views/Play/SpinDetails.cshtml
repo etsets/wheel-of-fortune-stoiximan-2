@@ -1,0 +1,37 @@
+﻿@model WheelOfFortune.Models.SpinEntry
+@{
+    ViewData["Title"] = "SpinDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Spin Details</h2>
+
+
+
+<table style="width:100%;" class="table">
+    <tr>
+        <th>
+            History Id
+        </th>
+        <th>
+            Bet Amount
+        </th>
+        <th>
+            Result Amount
+        </th>
+    </tr>
+    <tr>
+        <td>&nbsp;
+            @Model.HistoryEntryId
+        </td>
+        <td>&nbsp;
+            @Model.BetAmount
+        </td>
+        <td>&nbsp;
+            @Model.ResultAmount
+        </td>
+    </tr>
+</table> 
+<div>
+    <input type="button" class="btn btn-default" value="Back to History" onclick="location.href='@Url.Action("History", "Play")'" />
+</div>

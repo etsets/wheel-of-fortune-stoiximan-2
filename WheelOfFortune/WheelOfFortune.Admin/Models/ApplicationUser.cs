@@ -36,7 +36,7 @@ namespace WheelOfFortune.Admin.Models
 
         [Required]
         [DataType(DataType.Currency)]
-        public float Balance { get; set; } = 200.0F;
+        public float Balance { get; set; } = 100.0F;
 
         [InverseProperty("CreatedBy")]
         public ICollection<HistoryEntry> HistoryEntries { get; set; }
