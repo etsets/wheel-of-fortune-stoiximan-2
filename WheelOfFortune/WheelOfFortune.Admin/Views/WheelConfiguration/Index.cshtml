@@ -30,10 +30,17 @@
                $("#server-results").html("Settings successfully uploaded");
                console.log('Settings successfully uploaded');
                
-          }).fail(function (response) { 
-               $("#server-results").addClass("alert alert-danger fade in");
-               $("#server-results").html("Error uploading the settings"); 
-               
+               }).fail(function (jqXHR, status, error) { 
+                    $("#server-results").addClass("alert alert-danger fade in");
+                    if (jqXHR.status == 500) {
+                         $("#server-results").html("Internal Server Error");
+                    }
+                    else if (jqXHR.status == 400) {
+                         $("#server-results").html("Invalid Json Schema");
+                    }
+                    else if (jqXHR.status == 415) {
+                         $("#server-results").html("The settings must be in Json format");
+                    }
                console.log('Error uploading the settings');
                
           });
@@ -41,10 +48,10 @@
           setTimeout(function () {
                $("#server-results").html("");
                $("#server-results").removeClass();
+               console.log('Timeout');
           }, 3000);
      });
   });
-
 
 </script>
 
