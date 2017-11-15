@@ -1,9 +1,9 @@
-
+﻿
 ﻿@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc
 @using WheelOfFortune.Models
 
-﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+
 @inject SignInManager<ApplicationUser> SignInManager
 
 <!DOCTYPE html>
@@ -27,7 +27,7 @@
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     </environment>
-    @Html.Raw(JavaScriptSnippet.FullScript)
+
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
