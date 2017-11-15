@@ -10,6 +10,7 @@ namespace WheelOfFortune.Models
     {
         public string AccountName { get; set; }
         public string AccountKey { get; set; }
+
         public string QueueName { get; set; }
         public string ImageContainer = "faceapi";
         public string ThumbnailContainer = "faceapi-thumb";

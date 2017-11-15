@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace WheelOfFortune.Models
 {
@@ -26,6 +28,7 @@ namespace WheelOfFortune.Models
 
         [Required]
         public EntryType HistoryEntryTypeId { get; set; }
-        
+
     }
 }
+

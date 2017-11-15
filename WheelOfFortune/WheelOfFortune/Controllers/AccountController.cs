@@ -29,8 +29,10 @@ namespace WheelOfFortune.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+
         private readonly string subscriptionKey;
         private readonly string uriBase;
+
         private readonly AzureStorageConfig storageConfig = null;
 
         public AccountController(
@@ -79,7 +81,7 @@ namespace WheelOfFortune.Controllers
             {
 
                     // Require the user to have a confirmed email before they can log on.
-                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    /*var user = await _userManager.FindByEmailAsync(model.Email);
                     if (user != null)
                     {
                          if (!await _userManager.IsEmailConfirmedAsync(user))
@@ -88,7 +90,7 @@ namespace WheelOfFortune.Controllers
                                             "You must have a confirmed email to log in.");
                               return View(model);
                          }
-                    }
+                    }*/
 
 
 

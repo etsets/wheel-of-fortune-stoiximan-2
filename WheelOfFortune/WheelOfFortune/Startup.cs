@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WheelOfFortune.Additionals;
 using WheelOfFortune.Data;
 using WheelOfFortune.Models;
 using WheelOfFortune.Services;
@@ -40,10 +41,10 @@ namespace WheelOfFortune
                     options.Password.RequiredUniqueChars = 2;
                     // Lockout settings
                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
-                    options.Lockout.MaxFailedAccessAttempts = 3;
-                    options.Lockout.AllowedForNewUsers = true;
+                    options.Lockout.MaxFailedAccessAttempts = 0; //3
+                    options.Lockout.AllowedForNewUsers = false;//true
                     // Signin settings
-                    options.SignIn.RequireConfirmedEmail = true;
+                    options.SignIn.RequireConfirmedEmail = false;//true
                     options.SignIn.RequireConfirmedPhoneNumber = false;
                })
                    .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -53,7 +54,10 @@ namespace WheelOfFortune
             services.AddTransient<IEmailSender, EmailSender>();
                services.Configure<AuthMessageSenderOptions>(Configuration);
 
-               services.AddMvc();
+            services.AddMvc();
+            services.AddCors();
+            //services.AddSignalR();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,6 +77,16 @@ namespace WheelOfFortune
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            /*app.UseSignalR(routes =>
+            {
+                routes.MapHub<UserBalanceUpdated>("userbalanceupdated");
+            });*/
+
+            app.UseCors(builder =>
+                  builder.WithOrigins("*") //Use these settings for localhost testing only
+                  .AllowAnyHeader()
+                  );
 
             app.UseMvc(routes =>
             {

@@ -1,0 +1,48 @@
+﻿@using WheelOfFortune.Models
+
+@model IEnumerable<WheelOfFortune.Models.Wheel>
+
+@{
+    ViewData["Title"] = "Available Wheel Games";
+}
+
+<br />
+<br />
+
+<h2>@ViewData["Title"]</h2>
+
+@{ 
+    const int maxItemsPerRow = 3;
+    int itemCount = 0;
+    bool openLine = false;
+    bool closeLine = false;
+}
+<div class="row">
+    @foreach (var item in Model)
+    {
+        if (!item.IsEnabled)
+        {
+            continue;
+        }
+        else
+        {
+            openLine = ((itemCount % maxItemsPerRow) == 0);
+            closeLine = ((itemCount % maxItemsPerRow) == (maxItemsPerRow - 1)) || (Model.Count() == (itemCount - 1));
+            ++itemCount;
+        }
+
+        <div class="col-md-4" >
+            <div class="tile">
+                <br />
+                @Html.DisplayFor(wheelItem => item.WheelName)
+                @Html.DisplayFor(modelItem => item.WheelDescription)
+                <br />
+                <a asp-action="Play" asp-route-id="@item.WheelId">Play</a>
+            </div>
+        </div>
+
+    }
+</div>
+
+
+
