@@ -21,12 +21,6 @@ namespace WheelOfFortune.Data
         public DbSet<SpinEntry> SpinEntries { get; set; }
         public DbSet<HistoryEntry> HistoryEntries { get; set; }
 
-        public DbSet<Wheel> Wheels { get; set; }
-        public DbSet<WheelSlice> WheelSlices { get; set; }
-        public DbSet<Voucher> Vouchers { get; set; }
-        public DbSet<DepositEntry> DepositEntries { get; set; }
-        public DbSet<SpinEntry> SpinEntries { get; set; }
-        public DbSet<HistoryEntry> HistoryEntries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
