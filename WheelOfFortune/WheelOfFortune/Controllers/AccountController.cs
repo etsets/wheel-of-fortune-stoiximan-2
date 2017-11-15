@@ -33,6 +33,7 @@ namespace WheelOfFortune.Controllers
         private readonly string subscriptionKey;
         private readonly string uriBase;
 
+
         private readonly AzureStorageConfig storageConfig = null;
 
         public AccountController(

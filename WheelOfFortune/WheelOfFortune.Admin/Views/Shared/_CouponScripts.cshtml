@@ -1,0 +1,26 @@
+﻿<script>
+        $("#createCouponsButton").click(function (event) {
+            $.ajax({
+                type: 'POST',
+                url: 'CreateCoupons',
+                data: JSON.stringify({numberOfTickets: 1000 }),
+                contentType: 'application/json; charset=utf-8',
+                success: function () {
+                    window.location.reload();
+                }
+            });
+        });
+
+        $("#deleteCouponsButton").click(function (event) {
+            $.ajax({
+                url: 'DeleteVouchers',
+                type: 'POST',
+                data: JSON.stringify({ NumOfCoupons: 1000 }),
+                contentType: 'application/json; charset=utf-8',
+                success: function () {
+                    window.location.reload();
+                }
+            });
+    });
+        
+</script>
