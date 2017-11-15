@@ -1,0 +1,44 @@
+﻿@model IEnumerable<WheelOfFortune.Models.HistoryEntry>
+@{
+    ViewData["Title"] = "SpinHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Spin History</h2>
+
+<table class="table">
+
+    <tr>
+        <th>
+        </th>
+        <th>
+            Id
+        </th>
+        <th>
+            Type
+        </th>
+        <th>
+            Time
+        </th>
+    </tr>
+
+    @foreach (var b in Model)
+    {
+
+        <tr>
+            <td>
+                @Html.ActionLink("Details", "SpinDetails", new { hid = b.HistoryEntryId})
+            </td>
+            <td>
+                @b.HistoryEntryId
+            </td>
+            <td>
+                @b.HistoryEntryTypeId
+            </td>
+            <td>
+                @b.TimeOccurred
+            </td>
+        </tr>
+    }
+
+</table> 

@@ -4,14 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using WheelOfFortune.Data;
-using WheelOfFortune.Models;
+using WheelOfFortune.Admin.Data;
+using WheelOfFortune.Admin.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
-namespace WheelOfFortune.Controllers
+namespace WheelOfFortune.Admin.Controllers
 {
     public class PlayController : Controller
     {
@@ -37,9 +37,9 @@ namespace WheelOfFortune.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            var entries = await _context.HistoryEntries
-                .Where(h => h.CreatedBy.Equals(user.Id))
-                .OrderBy(h => h.TimeOccurred)
+            var entries = await _context.Users
+               // .Where(h => h.CreatedBy.Equals(user.Id))
+                //.OrderBy(h => h.TimeOccurred)
                 .ToListAsync();
             return View(entries);
         }

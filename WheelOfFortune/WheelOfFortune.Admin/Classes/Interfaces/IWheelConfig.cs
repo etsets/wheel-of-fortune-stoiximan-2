@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WheelOfFortune.Admin.Classes.Interfaces
 {
-     interface IWheelConfig
+     public interface IWheelConfig
      {
           Object GetWheelConfig();
-          void PostWheelConfig(JObject json);
+          Boolean PostWheelConfig(JObject json);
     }
 }

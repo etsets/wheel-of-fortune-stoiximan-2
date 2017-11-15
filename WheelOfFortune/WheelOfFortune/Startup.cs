@@ -29,7 +29,7 @@ namespace WheelOfFortune
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+               
                services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                {
                     // Password settings
@@ -52,10 +52,12 @@ namespace WheelOfFortune
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+               services.Configure<AuthMessageSenderOptions>(Configuration);
 
             services.AddMvc();
             services.AddCors();
             //services.AddSignalR();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,5 +95,7 @@ namespace WheelOfFortune
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
-    }
+
+          
+     }
 }

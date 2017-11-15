@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WheelOfFortune.Models;
 using WheelOfFortune.Models.AccountViewModels;
@@ -23,12 +24,15 @@ namespace WheelOfFortune.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
+        private IConfiguration _configuration;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
-        const string subscriptionKey = "7acca518d1b141db9f629c30c8a424af";
-        const string uriBase = "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
+
+        private readonly string subscriptionKey;
+        private readonly string uriBase;
+
         private readonly AzureStorageConfig storageConfig = null;
 
         public AccountController(
@@ -36,13 +40,21 @@ namespace WheelOfFortune.Controllers
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger,
-            IOptions<AzureStorageConfig> config)
+            IOptions<AzureStorageConfig> config,
+            IConfiguration appConfig)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             storageConfig = config.Value;
+            _configuration = appConfig;
+
+            subscriptionKey = _configuration.GetValue<string>("subscriptionKey");
+            uriBase = _configuration.GetValue<string>("uriBase");
+
+            storageConfig.AccountName = _configuration.GetValue<string>("AccountName");
+            storageConfig.AccountKey = _configuration.GetValue<string>("AccountKey");
         }
 
         [TempData]
