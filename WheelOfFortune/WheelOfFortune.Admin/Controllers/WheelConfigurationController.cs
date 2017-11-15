@@ -7,8 +7,11 @@ using WheelOfFortune.Admin.Services;
 
 namespace WheelOfFortune.Admin.Controllers
 {
-     //[Route("api/json")]
-     //[Authorize(Roles = "Administrators")]
+
+     [Route("api/json")]
+     [Authorize(Roles = "Administrators")]
+
+     [Authorize(Roles = "Admin")]
      public class WheelConfigurationController : Controller
     {
           private readonly IWheelConfig _wheelConfig;

@@ -21,12 +21,15 @@ namespace WheelOfFortune.Data
         public DbSet<SpinEntry> SpinEntries { get; set; }
         public DbSet<HistoryEntry> HistoryEntries { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);\
+
             builder.Entity<Wheel>().ToTable("Wheels");
             builder.Entity<WheelSlice>().ToTable("WheelSlices");
             builder.Entity<Voucher>().ToTable("Vouchers");
@@ -37,6 +40,8 @@ namespace WheelOfFortune.Data
             builder.Entity<DepositEntry>()
                 .HasKey(d => new { d.HistoryEntryId, d.VoucherId });
         }
+
         public DbSet<WheelOfFortune.Models.ApplicationUser> Gamers { get; set; }
+
     }
 }

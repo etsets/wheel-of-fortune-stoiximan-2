@@ -6,15 +6,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
-using WheelOfFortune.Data;
-using WheelOfFortune.Models;
+using WheelOfFortune.Admin.Data;
+using WheelOfFortune.Admin.Models;
 
-namespace WheelOfFortune.Data.Migrations
+namespace WheelOfFortune.Admin.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171022121825_fisrt")]
+    partial class fisrt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,7 +130,7 @@ namespace WheelOfFortune.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("WheelOfFortune.Models.ApplicationUser", b =>
+            modelBuilder.Entity("WheelOfFortune.Admin.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -198,7 +199,7 @@ namespace WheelOfFortune.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("WheelOfFortune.Models.DepositEntry", b =>
+            modelBuilder.Entity("WheelOfFortune.Admin.Models.DepositEntry", b =>
                 {
                     b.Property<int>("HistoryEntryId");
 
@@ -211,7 +212,7 @@ namespace WheelOfFortune.Data.Migrations
                     b.ToTable("DepositEntries");
                 });
 
-            modelBuilder.Entity("WheelOfFortune.Models.HistoryEntry", b =>
+            modelBuilder.Entity("WheelOfFortune.Admin.Models.HistoryEntry", b =>
                 {
                     b.Property<int>("HistoryEntryId")
                         .ValueGeneratedOnAdd();
@@ -230,7 +231,7 @@ namespace WheelOfFortune.Data.Migrations
                     b.ToTable("HistoryEntries");
                 });
 
-            modelBuilder.Entity("WheelOfFortune.Models.SpinEntry", b =>
+            modelBuilder.Entity("WheelOfFortune.Admin.Models.SpinEntry", b =>
                 {
                     b.Property<int>("HistoryEntryId");
 
@@ -243,7 +244,7 @@ namespace WheelOfFortune.Data.Migrations
                     b.ToTable("SpinEntries");
                 });
 
-            modelBuilder.Entity("WheelOfFortune.Models.Voucher", b =>
+            modelBuilder.Entity("WheelOfFortune.Admin.Models.Voucher", b =>
                 {
                     b.Property<int>("VoucherId")
                         .ValueGeneratedOnAdd();
@@ -263,7 +264,7 @@ namespace WheelOfFortune.Data.Migrations
                     b.ToTable("Vouchers");
                 });
 
-            modelBuilder.Entity("WheelOfFortune.Models.Wheel", b =>
+            modelBuilder.Entity("WheelOfFortune.Admin.Models.Wheel", b =>
                 {
                     b.Property<int>("WheelId")
                         .ValueGeneratedOnAdd();
@@ -281,7 +282,7 @@ namespace WheelOfFortune.Data.Migrations
                     b.ToTable("Wheels");
                 });
 
-            modelBuilder.Entity("WheelOfFortune.Models.WheelSlice", b =>
+            modelBuilder.Entity("WheelOfFortune.Admin.Models.WheelSlice", b =>
                 {
                     b.Property<int>("SliceId")
                         .ValueGeneratedOnAdd();
@@ -319,7 +320,7 @@ namespace WheelOfFortune.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("WheelOfFortune.Models.ApplicationUser")
+                    b.HasOne("WheelOfFortune.Admin.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -327,7 +328,7 @@ namespace WheelOfFortune.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("WheelOfFortune.Models.ApplicationUser")
+                    b.HasOne("WheelOfFortune.Admin.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -340,7 +341,7 @@ namespace WheelOfFortune.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("WheelOfFortune.Models.ApplicationUser")
+                    b.HasOne("WheelOfFortune.Admin.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -348,44 +349,44 @@ namespace WheelOfFortune.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("WheelOfFortune.Models.ApplicationUser")
+                    b.HasOne("WheelOfFortune.Admin.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WheelOfFortune.Models.DepositEntry", b =>
+            modelBuilder.Entity("WheelOfFortune.Admin.Models.DepositEntry", b =>
                 {
-                    b.HasOne("WheelOfFortune.Models.HistoryEntry", "BelongsToHistoryEntry")
+                    b.HasOne("WheelOfFortune.Admin.Models.HistoryEntry", "BelongsToHistoryEntry")
                         .WithMany()
                         .HasForeignKey("HistoryEntryId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("WheelOfFortune.Models.Voucher", "BelongsToVoucherEntry")
+                    b.HasOne("WheelOfFortune.Admin.Models.Voucher", "BelongsToVoucherEntry")
                         .WithMany()
                         .HasForeignKey("VoucherId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WheelOfFortune.Models.HistoryEntry", b =>
+            modelBuilder.Entity("WheelOfFortune.Admin.Models.HistoryEntry", b =>
                 {
-                    b.HasOne("WheelOfFortune.Models.ApplicationUser", "CreatedBy")
+                    b.HasOne("WheelOfFortune.Admin.Models.ApplicationUser", "CreatedBy")
                         .WithMany("HistoryEntries")
                         .HasForeignKey("CreatedById")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WheelOfFortune.Models.SpinEntry", b =>
+            modelBuilder.Entity("WheelOfFortune.Admin.Models.SpinEntry", b =>
                 {
-                    b.HasOne("WheelOfFortune.Models.HistoryEntry", "BelongsToHistoryEntry")
+                    b.HasOne("WheelOfFortune.Admin.Models.HistoryEntry", "BelongsToHistoryEntry")
                         .WithMany()
                         .HasForeignKey("HistoryEntryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WheelOfFortune.Models.WheelSlice", b =>
+            modelBuilder.Entity("WheelOfFortune.Admin.Models.WheelSlice", b =>
                 {
-                    b.HasOne("WheelOfFortune.Models.Wheel", "ContainerWheel")
+                    b.HasOne("WheelOfFortune.Admin.Models.Wheel", "ContainerWheel")
                         .WithMany("Slices")
                         .HasForeignKey("WheelId");
                 });
