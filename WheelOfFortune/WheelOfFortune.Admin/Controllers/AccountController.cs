@@ -72,7 +72,7 @@ namespace WheelOfFortune.Admin.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -135,7 +135,7 @@ namespace WheelOfFortune.Admin.Controllers
             if (result.Succeeded)
             {
                 _logger.LogInformation("User with ID {UserId} logged in with 2fa.", user.Id);
-                return RedirectToLocal(returnUrl);
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
             else if (result.IsLockedOut)
             {
@@ -189,7 +189,7 @@ namespace WheelOfFortune.Admin.Controllers
             if (result.Succeeded)
             {
                 _logger.LogInformation("User with ID {UserId} logged in with a recovery code.", user.Id);
-                return RedirectToLocal(returnUrl);
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
             if (result.IsLockedOut)
             {
@@ -261,7 +261,7 @@ namespace WheelOfFortune.Admin.Controllers
                     //var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     //await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
                 }
                 AddErrors(result);
             }
@@ -310,7 +310,7 @@ namespace WheelOfFortune.Admin.Controllers
             if (result.Succeeded)
             {
                 _logger.LogInformation("User logged in with {Name} provider.", info.LoginProvider);
-                return RedirectToLocal(returnUrl);
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
             if (result.IsLockedOut)
             {
@@ -348,7 +348,7 @@ namespace WheelOfFortune.Admin.Controllers
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
-                        return RedirectToLocal(returnUrl);
+                        return RedirectToAction(nameof(HomeController.Index), "Home");
                     }
                 }
                 AddErrors(result);
@@ -478,14 +478,7 @@ namespace WheelOfFortune.Admin.Controllers
 
         private IActionResult RedirectToLocal(string returnUrl)
         {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
         #endregion
