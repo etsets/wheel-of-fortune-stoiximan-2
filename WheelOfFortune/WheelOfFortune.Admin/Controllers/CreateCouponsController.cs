@@ -9,20 +9,32 @@ using WheelOfFortune.Admin.Data;
 using WheelOfFortune.Admin.Additionals;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WheelOfFortune.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Produces("application/json")]
     [Route("[controller]/[action]")]
     public class CreateCouponsController : Controller
     {
+        int length = 6 ;
+        private static Random random = new Random();
+        private readonly ApplicationDbContext _context;
+
+        public CreateCouponsController(ApplicationDbContext context) 
+        {
+            _context = context;
+        }
+
+        [HttpGet]
         public async Task<IActionResult> CouponsList(string sortOrder, int? page)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["IsUsedSortParm"] = String.IsNullOrEmpty(sortOrder) ? "is_used_desc" : "";
-            
+
             var coupons = from s in _context.Vouchers
-                           select s;
+                          select s;
             switch (sortOrder)
             {
                 case "is_used_desc":
@@ -36,16 +48,9 @@ namespace WheelOfFortune.Admin.Controllers
             int pageSize = 100;
             return View(await PaginatedList<Voucher>.CreateAsync(coupons.AsNoTracking(), page ?? 1, pageSize));
         }
-        int length = 6 ;
-        private static Random random = new Random();
-        private readonly ApplicationDbContext _context;
-
-         public CreateCouponsController(ApplicationDbContext context) 
-        {
-            _context = context;
-        }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateCoupons([FromBody] JObject numberOfTickets)
         {
             int numOfTickets = numberOfTickets.Value<int>("numberOfTickets");
@@ -83,6 +88,7 @@ namespace WheelOfFortune.Admin.Controllers
 
         // POST: api/RedeemVoucher
         [HttpPost("{VoucherId}")]
+        [ValidateAntiForgeryToken]
         public async Task<bool> RedeemVoucher(int VoucherId)
         {
            Voucher coupon =  _context.Vouchers.
@@ -101,6 +107,7 @@ namespace WheelOfFortune.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task DeleteVouchers([FromBody] JObject NumOfCoupons)
         {
             int numberOfCoupons = NumOfCoupons.Value<int>("NumOfCoupons");

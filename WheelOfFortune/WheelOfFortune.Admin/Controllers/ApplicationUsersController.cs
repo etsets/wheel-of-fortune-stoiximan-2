@@ -35,6 +35,7 @@ namespace WheelOfFortune.Admin.Controllers
         }
 
         // GET: ApplicationUsers
+        [HttpGet]
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewData["CurrentSort"] = sortOrder;
@@ -73,6 +74,7 @@ namespace WheelOfFortune.Admin.Controllers
         }
 
         // GET: ApplicationUsers/Details/5
+        [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
             if (id == null)
@@ -89,7 +91,8 @@ namespace WheelOfFortune.Admin.Controllers
 
             return View(applicationUser);
         }
-        
+
+        [HttpGet]
         public async Task<IActionResult> History(string id)
         {
             if (id == null)
@@ -107,7 +110,8 @@ namespace WheelOfFortune.Admin.Controllers
 
             return View(historyUser);
         }
-        
+
+        [HttpGet]
         public async Task<IActionResult> SpinDetails(int hid)
         {
                  var spindetails = await _context.SpinEntries
@@ -117,7 +121,8 @@ namespace WheelOfFortune.Admin.Controllers
             
             return View(spindetails);
         }
-        
+
+        [HttpGet]
         public async Task<IActionResult> DepositDetails(int hid)
         {
              var depositdetails = await _context.DepositEntries
@@ -130,6 +135,7 @@ namespace WheelOfFortune.Admin.Controllers
         }
 
         // GET: ApplicationUsers/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -152,6 +158,7 @@ namespace WheelOfFortune.Admin.Controllers
         }
 
         // GET: ApplicationUsers/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -212,6 +219,7 @@ namespace WheelOfFortune.Admin.Controllers
         }
 
         // GET: ApplicationUsers/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)

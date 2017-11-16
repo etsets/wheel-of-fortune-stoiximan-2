@@ -17,7 +17,7 @@ using WheelOfFortune.Admin.Services;
 
 namespace WheelOfFortune.Admin.Controllers
 {
-    [Authorize]
+
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
