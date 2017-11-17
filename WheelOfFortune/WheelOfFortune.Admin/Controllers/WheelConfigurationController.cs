@@ -7,10 +7,7 @@ using WheelOfFortune.Admin.Services;
 
 namespace WheelOfFortune.Admin.Controllers
 {
-
      [Route("api/json")]
-     [Authorize(Roles = "Administrators")]
-
      [Authorize(Roles = "Admin")]
      public class WheelConfigurationController : Controller
     {
@@ -26,9 +23,9 @@ namespace WheelOfFortune.Admin.Controllers
           [HttpGet]
           [Route("api/json")]
           [AllowAnonymous]
+
           public JObject GetWheelConfig()
-        {
-               //WheelConfig wheelconfig = new WheelConfig();
+          {
                return _wheelConfig.GetWheelConfig();
           }
 
@@ -36,20 +33,17 @@ namespace WheelOfFortune.Admin.Controllers
           // POST api/json
           [Route("api/json")]
           [HttpPost]
+          [ValidateAntiForgeryToken] 
           public IActionResult PostWheelConfig([FromBody]JObject jsonObject)
           {
-               //WheelConfig wheelconfig = new WheelConfig();
                return StatusCode((int) _wheelConfig.PostWheelConfig(jsonObject));
-               //return _wheelConfig.PostWheelConfig(jsonObject);
-
           }
 
-          public IActionResult Index()
-          {
-
-               //var json = GetWheelConfig();
-               return View(_wheelConfig.GetWheelConfig());
-          }
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return View(_wheelConfig.GetWheelConfig());
+        }
 
 
      }

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace WheelOfFortune.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class PlayController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -26,13 +27,15 @@ namespace WheelOfFortune.Admin.Controllers
             _context = context;
             _userManager = userManager;
         }
-        [Authorize]
-          [ResponseCache(NoStore = true, Duration = 0)]
-          public IActionResult Index()
+
+        [HttpGet]
+        [ResponseCache(NoStore = true, Duration = 0)]
+        public IActionResult Index()
         {
             return View();
         }
-        [Authorize]
+
+        [HttpGet]
         public async Task<IActionResult> History()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -43,7 +46,8 @@ namespace WheelOfFortune.Admin.Controllers
                 .ToListAsync();
             return View(entries);
         }
-        [Authorize]
+
+        [HttpGet]
         public async Task<IActionResult> SpinDetails(int hid)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -54,7 +58,8 @@ namespace WheelOfFortune.Admin.Controllers
                 .FirstOrDefaultAsync();
             return View(spindetails);
         }
-        [Authorize]
+
+        [HttpGet]
         public async Task<IActionResult> DepositDetails(int hid)
         {
             var user = await _userManager.GetUserAsync(User);

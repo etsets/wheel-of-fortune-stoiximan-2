@@ -21,7 +21,7 @@ using System.Text;
 
 namespace WheelOfFortune.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     [Route("[controller]/[action]")]
     public class WheelGameController : Controller
     {
@@ -35,6 +35,7 @@ namespace WheelOfFortune.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             _context.Database.EnsureCreated();
@@ -44,21 +45,8 @@ namespace WheelOfFortune.Controllers
 
         // GET: WheelGame/Play/5
         [HttpGet]
-        public async Task<IActionResult> Play()//string id
+        public async Task<IActionResult> Play()
         {
-            /*_context.Database.EnsureCreated();
-            int numericWheelId;
-            if (id == null || !(int.TryParse(id, out numericWheelId)))
-            {
-                return NotFound();
-            }
-
-            var selectedWheel = await _context.Wheels.Include(s => s.Slices).SingleOrDefaultAsync(m => m.WheelId == numericWheelId);
-            if (selectedWheel == null)
-            {
-                return NotFound();
-            }*/
-
             return View();
         }
 
@@ -67,25 +55,14 @@ namespace WheelOfFortune.Controllers
         [HttpGet]
         public JsonResult GetWheelPlay()
         {
-            //CreatedAtRoute("GetTodo", new { id = item.Id }, item);
-
             return Json("{}");
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        //async Task<IActionResult>
-        //public JsonResult Spin([FromBody]JObject userdata)
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Spin([FromBody]JObject userdata)
         {
             var curUser = await _userManager.GetUserAsync(HttpContext.User);
-
-            /*var newHistoryEntry = new HistoryEntry()
-            {
-                CreatedBy = curUser,
-                TimeOccurred = DateTime.Now,
-                HistoryEntryTypeId = HistoryEntry.EntryType.Spin
-            };*/
 
             JToken st1 = userdata["spinResult"]["userData"]["score"];
             JToken st2 = userdata["betAmount"];
@@ -119,8 +96,6 @@ namespace WheelOfFortune.Controllers
                 try
                 {
                     await _context.SaveChangesAsync();
-                    //return View();
-                    //return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateException)
                 {
@@ -129,19 +104,7 @@ namespace WheelOfFortune.Controllers
                 }
             }
 
-            
-            //return View(newSpinEntry);
             return PartialView("_LoginPartial", curUser);
-
-            //BalanceViewComponent comp = new BalanceViewComponent(_context, _userManager);
-            //return await comp.InvokeAsync();
-
-            //return Json("{}");
-            /*StreamReader sr = new StreamReader("wheel_data_1.json");
-            string result = sr.ReadToEnd();
-            result = result.Replace("\r\n", "");
-            result = result.Replace("\\\\", "");
-            return Json(result);*/
         }
 
         [HttpGet]
@@ -151,9 +114,5 @@ namespace WheelOfFortune.Controllers
             return PartialView("_LoginPartial", curUser);
         }
 
-        /*public async Task<IActionResult> GetUpdatedBalance()
-        {
-            var curUser = await _userManager.GetUserAsync(HttpContext.User);
-        }*/
     }
 }
