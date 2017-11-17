@@ -12,8 +12,6 @@ using WheelOfFortune.Admin.Data;
 using WheelOfFortune.Admin.Models;
 using WheelOfFortune.Admin.Services;
 using Microsoft.AspNetCore.Cors;
-using WheelOfFortune.Admin.Classes.Interfaces;
-using WheelOfFortune.Admin.Classes.Implementations;
 
 namespace WheelOfFortune.Admin
 {
