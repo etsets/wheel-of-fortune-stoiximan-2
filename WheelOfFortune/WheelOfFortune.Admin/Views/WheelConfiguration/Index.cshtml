@@ -41,6 +41,10 @@
                     else if (jqXHR.status == 415) {
                          $("#server-results").html("The settings must be in Json format");
                     }
+                    else {
+                         $("#server-results").html("Something went wrong, try again.");
+
+                    }
                console.log('Error uploading the settings');
                
           });
