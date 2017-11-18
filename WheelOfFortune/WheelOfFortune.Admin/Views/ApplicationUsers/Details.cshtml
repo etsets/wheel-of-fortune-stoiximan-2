@@ -94,6 +94,18 @@
         <dd>
             @Html.DisplayFor(model => model.AccessFailedCount)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Photo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Photo)
+        </dd>
+        <dt>
+            
+        </dt>
+        <dd>
+            <img src="@Model.Photo" alt="Image file not found">
+        </dd>
     </dl>
 </div>
 <div>

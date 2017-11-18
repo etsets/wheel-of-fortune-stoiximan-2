@@ -1,7 +1,7 @@
-, .peg, .wheelSVG {
+.peg, .wheelSVG {
  visibility: hidden;
 }
-.wheelContainer, body, html {
+.wheelContainer {
  width: 100%;
  height: 100%;
  margin: 0;
@@ -10,24 +10,17 @@
 .centerCircle, .valueContainer, .wheelOutline, .wheelText {
  pointer-events: none;
 }
-.toast, .wheelContainer, body, html {
+.toast, .wheelContainer {
  text-align: center;
 }
-.wheelContainer, button {
+.wheelContainer, .wheel-button {
  transform: translate(-50%, 0);
 }
-.toast, button {
+.toast, .wheel-button {
  position: absolute;
  background-color: #E81D62;
 }
-body {
- background-color: #2d2d2d;
- overflow: hidden;
-}
-body, html {
- margin: 0;
- padding: 0;
-}
+
 .wheelContainer {
  position: absolute;
  max-width: 1000px;
@@ -35,6 +28,7 @@ body, html {
  margin-right: auto;
  left: 50%;
  top: 100px;
+ height: auto;
 }
 .wheelSVG {
  position: absolute;
@@ -69,14 +63,15 @@ body, html {
  -webkit-transition: line-height .2s ease;
  transition: line-height .2s ease;
 }
-button {
+
+.wheel-button {
  left:50%;
  width: 80%;
  top: 20px;
  max-width: 400px;
  padding: 20px;
  font-weight: 700;
- font-size: 32px;
+ font-size: 22px;
  color: #ededed;
  border-radius: 6px;
  border: none;
@@ -84,6 +79,8 @@ button {
  cursor: pointer;
  font-family: "Fjalla One", Helvetica, Arial, sans-serif;
 }
+    
+
 @media only screen and (max-width: 480px) {
  .toast p, .toast span {
   font-size: 18px;
@@ -107,15 +104,21 @@ button {
   font-size: 33px;
   line-height: 35px;
  }
- button {
+ .wheel-button {
   font-size: 22px;
   padding: 10px;
   width: 40%;
  }
  .wheelContainer {
   top: 70px;
+  height:auto;
  }
 }
-button:focus {
- outline: 0;
+.wheel-button:focus {
+    outline: 0;
 }
+
+footer, hr
+{display:none; visibility:hidden;}
+
+

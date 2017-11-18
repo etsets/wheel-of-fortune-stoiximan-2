@@ -5,59 +5,90 @@
 @{
     ViewData["Title"] = "Play";
 }
+<link rel="stylesheet" href="~/css/wheel.css" />
+<script>
+    function validateCurrency()
+    {
+        var val1 = Number(document.getElementById("BetAmount").value);
+        var currentBalance = Number(document.getElementById("BalanceOnTitle").innerText);
+        //alert(currentBalance+" "+val1);
+        if (/^\d+$/.test(val1) && currentBalance > 0 && (val1 * 2.5) <= currentBalance && val1>0) {
+            //proceed with rest of code
+            //alert("ok");
+            document.getElementById("BalanceError").innerText = '';
+            document.getElementById("spinBtn").disabled = false;
+        }
+        else if (currentBalance <= 0 || (val1 * 2.5) > currentBalance)
+        {
+            document.getElementById("BetAmount").value = '';
+            document.getElementById("BalanceError").innerText = 'You do not have enough money to bet ! Please update your balance.';
+            document.getElementById("spinBtn").disabled = true;
+            return false;
+        }
+        else
+        {
+            //alert("Invalid");
+            document.getElementById("BetAmount").value = '';
+            document.getElementById("BalanceError").innerText = 'Invalid bet amount !';
+            document.getElementById("spinBtn").disabled = true;
+            return false;
+        }
+    }
+</script>
 
 
     <div class="row" style="height:auto;">
 
-    <section>
-        <form id="BetForm" method="post" style="margin-top: 40px;">
+
+        <form id="BetForm" method="post" style="margin-top: 40px;text-align:left;float:left; width: 80%; margin-left:10%;">
             <div class="form-group">
-                <label asp-for="BetAmount"></label>
-                <input asp-for="BetAmount" class="form-control" />
-                <span asp-validation-for="BetAmount" class="text-danger"></span>
+                <label asp-for="BetAmount" style="font-size:15px;">Bet amount&nbsp;&#8364;&nbsp;:</label>
+                <input placeholder="&#8364;&nbsp;" asp-for="BetAmount" oninput="validateCurrency()" class="form-control" style="width: 120px;" />
+                <span id="BalanceError" asp-validation-for="BetAmount" class="text-danger"></span>
             </div>
         </form>
-    </section>
+    </div>
 
-            <div class="col-md-12" style="height:auto;">
+    <div class="row" style="height:auto;">
+    <div class="col-md-12" style="height:auto;">
 
 
-                <button class="spinBtn">CLICK TO SPIN!</button>
-                <div class="wheelContainer">
-                    <svg class="wheelSVG" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" text-rendering="optimizeSpeed">
-                        <defs>
-                            <filter id="shadow" x="-100%" y="-100%" width="550%" height="550%">
-                                <feOffset in="SourceAlpha" dx="0" dy="0" result="offsetOut"></feOffset>
-                                <feGaussianBlur stdDeviation="9" in="offsetOut" result="drop" />
-                                <feColorMatrix in="drop" result="color-out" type="matrix" values="0 0 0 0   0
+        <button id="spinBtn" class="spinBtn wheel-button">CLICK TO SPIN!</button>
+        <div class="wheelContainer">
+            <svg class="wheelSVG" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" text-rendering="optimizeSpeed">
+                <defs>
+                    <filter id="shadow" x="-100%" y="-100%" width="550%" height="550%">
+                        <feOffset in="SourceAlpha" dx="0" dy="0" result="offsetOut"></feOffset>
+                        <feGaussianBlur stdDeviation="9" in="offsetOut" result="drop" />
+                        <feColorMatrix in="drop" result="color-out" type="matrix" values="0 0 0 0   0
                                                                                       0 0 0 0   0
                                                                                       0 0 0 0   0
                                                                                       0 0 0 .3 0" />
-                                <feBlend in="SourceGraphic" in2="color-out" mode="normal" />
-                            </filter>
-                        </defs>
-                        <g class="mainContainer">
-                            <g class="wheel"></g>
-                        </g>
-                        <g class="centerCircle" />
-                        <g class="wheelOutline" />
-                        <g class="pegContainer" opacity="1">
-                            <path class="peg" fill="#EEEEEE" d="M22.139,0C5.623,0-1.523,15.572,0.269,27.037c3.392,21.707,21.87,42.232,21.87,42.232 s18.478-20.525,21.87-42.232C45.801,15.572,38.623,0,22.139,0z" />
-                        </g>
-                        <g class="valueContainer" />
-                    </svg>
+                        <feBlend in="SourceGraphic" in2="color-out" mode="normal" />
+                    </filter>
+                </defs>
+                <g class="mainContainer">
+                    <g class="wheel"></g>
+                </g>
+                <g class="centerCircle" />
+                <g class="wheelOutline" />
+                <g class="pegContainer" opacity="1">
+                    <path class="peg" fill="#EEEEEE" d="M22.139,0C5.623,0-1.523,15.572,0.269,27.037c3.392,21.707,21.87,42.232,21.87,42.232 s18.478-20.525,21.87-42.232C45.801,15.572,38.623,0,22.139,0z" />
+                </g>
+                <g class="valueContainer" />
+            </svg>
 
-                    <div class="toast">
-                        <p></p>
-                    </div>
-                </div>
-
+            <div class="toast">
+                <p></p>
             </div>
+        </div>
+
+    </div>
 
 </div>
 
 
-@section Scripts {
-    @await Html.PartialAsync("_WheelGameScriptsPartial")
-}
+    @section Scripts {
+        @await Html.PartialAsync("_WheelGameScriptsPartial")
+    }
 

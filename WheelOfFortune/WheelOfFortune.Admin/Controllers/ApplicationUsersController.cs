@@ -42,6 +42,7 @@ namespace WheelOfFortune.Admin.Controllers
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
 
+
             if (searchString != null)
             {
                 page = 1;
@@ -56,6 +57,14 @@ namespace WheelOfFortune.Admin.Controllers
 
             var gamers = from s in _context.Gamers
                            select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                gamers = gamers.Where(s => s.UserName.ToUpper().Contains(searchString.ToUpper()) || 
+                                           s.Lastname.ToUpper().Contains(searchString.ToUpper()) ||
+                                           s.Firstname.ToUpper().Contains(searchString.ToUpper()));
+            }
+
             switch (sortOrder)
             {
                 case "name_desc":
@@ -69,7 +78,7 @@ namespace WheelOfFortune.Admin.Controllers
                     break;
             }
 
-            int pageSize = 3;
+            int pageSize = 10;
             return View(await PaginatedList<ApplicationUser>.CreateAsync(gamers.AsNoTracking(), page ?? 1, pageSize));
         }
 
@@ -179,21 +188,24 @@ namespace WheelOfFortune.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, 
-            [Bind("Id,UserName,Email,EmailConfirmed,PhoneNumber,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit(string id,
+        //[Bind("Id,AccessFailedCount,ConcurrencyStamp,Email,EmailConfirmed,LockoutEnabled,LockoutEnd,NormalizedEmail,NormalizedUserName,PasswordHash,PhoneNumber ,PhoneNumberConfirmed  ,SecurityStamp,TwoFactorEnabled,UserName,Balance,Birthdate,Firstname,LastLogin,Lastname,Photo")]
+        [Bind("Id,EmailConfirmed,Firstname,Lastname,Photo,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")]
+            ApplicationUser applicationUser
+        )
         {
             if (id != applicationUser.Id)
             {
                 return NotFound();
             }
-
+            var userToUpdate = await _context.Gamers.SingleOrDefaultAsync(s => s.Id == id);
             if (ModelState.IsValid)
             {
-                var userToUpdate = await _context.Gamers.SingleOrDefaultAsync(s => s.Id == id);
+                //var userToUpdate = await _context.Gamers.SingleOrDefaultAsync(s => s.Id == id);
                 if (await TryUpdateModelAsync<ApplicationUser>(
                     userToUpdate,
                     "",
-                    s => s.LockoutEnd, s => s.LockoutEnabled, s => s.AccessFailedCount))
+                    s => s.LockoutEnd, s => s.LockoutEnabled, s => s.AccessFailedCount, s => s.EmailConfirmed))
                 {
                     try
                     {
@@ -215,7 +227,7 @@ namespace WheelOfFortune.Admin.Controllers
                     return RedirectToAction(nameof(Index));
                 }     
             }
-            return View(applicationUser);
+            return View(userToUpdate);
         }
 
         // GET: ApplicationUsers/Delete/5

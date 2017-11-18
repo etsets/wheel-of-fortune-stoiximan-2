@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WheelOfFortune.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [Produces("application/json")]
     [Route("[controller]/[action]")]
     public class CreateCouponsController : Controller
@@ -50,18 +50,14 @@ namespace WheelOfFortune.Admin.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateCoupons([FromBody] JObject numberOfTickets)
         {
             int numOfTickets = numberOfTickets.Value<int>("numberOfTickets");
-
-            var existingCoupons = from s  in _context.Vouchers
-                                            select s;
-
-            List<string> coupons = new List<string>();
-            List<Voucher> newCoupons = new List<Voucher>();
+            
+            int createdCoupons = 0;
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            while (coupons.Count < numOfTickets)
+            while (createdCoupons < numOfTickets)
             {
                 string coupon = new string(Enumerable.Repeat(chars, length)
                         .Select(s => s[random.Next(s.Length)]).ToArray());
@@ -71,24 +67,20 @@ namespace WheelOfFortune.Admin.Controllers
                 voucher.IsUsed = false;
                 voucher.CreditAmount = 10;
 
-                if (!existingCoupons.Any(cpn => cpn.VoucherCode.Equals(coupon))){
-                    newCoupons.Add(voucher);
-                    existingCoupons.Append(voucher);
-                    coupons.Insert(0,coupon); 
+                if (!_context.Vouchers.Any(cpn => cpn.VoucherCode.Equals(coupon))){
+                    createdCoupons++;
+                    _context.Vouchers.Add(voucher);
+                    await _context.SaveChangesAsync();
+
                 }
             }
-
-            _context.Vouchers.AddRange(newCoupons.AsEnumerable());
-            await _context.SaveChangesAsync();
-
-            IEnumerable<string> couponsToReturn = coupons.AsEnumerable();
             return View();
         }
         
 
         // POST: api/RedeemVoucher
         [HttpPost("{VoucherId}")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<bool> RedeemVoucher(int VoucherId)
         {
            Voucher coupon =  _context.Vouchers.
@@ -107,28 +99,25 @@ namespace WheelOfFortune.Admin.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task DeleteVouchers([FromBody] JObject NumOfCoupons)
         {
             int numberOfCoupons = NumOfCoupons.Value<int>("NumOfCoupons");
-            List<Voucher> existingCoupons = (from s in _context.Vouchers
-                                  select s).ToList<Voucher>();
-            List<Voucher> couponsToRemove = new List<Voucher>();
-            Voucher couponToRemove;
+            Voucher couponToEdit;
             while (numberOfCoupons != 0 ) {
-                couponToRemove = existingCoupons.FirstOrDefault(cpn => cpn.IsUsed);
-                if (couponToRemove == null)
+                couponToEdit = _context.Vouchers.FirstOrDefault(cpn => !cpn.IsUsed && cpn.Status.Equals(Voucher.VoucherStatus.New));
+                if (couponToEdit == null)
                 {
                     numberOfCoupons = 0;
                 }
                 else
                 {
-                    existingCoupons.Remove(couponToRemove);
-                    couponsToRemove.Append(couponToRemove);
+                    numberOfCoupons--;
+                    couponToEdit.Status = Voucher.VoucherStatus.Revoked;
+                    await _context.SaveChangesAsync();
+                
                 }
             }
-            _context.Vouchers.RemoveRange(couponsToRemove);
-            await _context.SaveChangesAsync();
         }
     }
 }

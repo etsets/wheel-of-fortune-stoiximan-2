@@ -1,0 +1,41 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h2> Deposit </h2>
+
+<form method="POST" id="DepositForm">
+
+    <div class="form-group">
+        <div class="row">
+
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="alert alert-success hidden">
+
+                    <strong> Success! </strong> <span class="successMessage"> </span>
+
+                </div>
+
+                <div class="alert alert-danger hidden">
+
+                    <strong>Erorr!</strong> <span class="errorMessage">  </span>
+
+                </div>
+                <label> Coupone code </label>
+                <input type="text" class="form-control" id="voucherCode" />
+                <span class="text-danger"></span>
+                <br />
+
+                <button id="SubmitCoupon" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Deposit request..." type="submit" class="btn btn-success"> Deposit now! </button>
+
+            </div><!--col-->
+
+        </div><!--row-->
+    </div><!--formgroup-->
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_DepositScripts");
+}

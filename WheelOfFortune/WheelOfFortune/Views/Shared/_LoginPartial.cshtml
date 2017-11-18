@@ -7,7 +7,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject ApplicationDbContext DbContext
 
-@model WheelOfFortune.Models.ApplicationUser
+
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -19,20 +19,15 @@
             <li>
                 @{
                     var balanceValue = 0.0;
-                    if (Model != null)
-                    {
-                        balanceValue = Model.Balance;
-                    }
-                    else
-                    {
+
                         ApplicationUser currentUser = UserManager.Users.SingleOrDefault(u => u.UserName == (UserManager.GetUserName(User)));
                         balanceValue = currentUser.Balance;
-                    }
+
                 }
-                Your balance is:@balanceValue
+                <a asp-area="">Your balance is : &#8364;  <span id="BalanceOnTitle">@balanceValue</span></a>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
+                <button type="submit" class="btn btn-default">Log out</button>
             </li>
         </ul>
     </form>

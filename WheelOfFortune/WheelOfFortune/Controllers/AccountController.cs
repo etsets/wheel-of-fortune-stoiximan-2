@@ -82,7 +82,7 @@ namespace WheelOfFortune.Controllers
             {
 
                     // Require the user to have a confirmed email before they can log on.
-                    /*var user = await _userManager.FindByEmailAsync(model.Email);
+                    var user = await _userManager.FindByEmailAsync(model.Email);
                     if (user != null)
                     {
                          if (!await _userManager.IsEmailConfirmedAsync(user))
@@ -91,7 +91,7 @@ namespace WheelOfFortune.Controllers
                                             "You must have a confirmed email to log in.");
                               return View(model);
                          }
-                    }*/
+                    }
 
 
 
@@ -277,7 +277,7 @@ namespace WheelOfFortune.Controllers
                         {
                             //Guid guid = new Guid();
                             isUploaded = await StorageHelper.UploadFileToStorage(model.ActualPhoto, model.Photo, storageConfig);
-                            var user = new ApplicationUser { Firstname = model.Firstname, Lastname = model.Lastname, Photo = "https://gypweufs01.blob.core.windows.net/faceapi/" + model.Photo, Birthdate = model.Birthdate.Date, UserName = model.Email, Email = model.Email };
+                            var user = new ApplicationUser { Firstname = model.Firstname, Lastname = model.Lastname, Photo = "https://codingschool.blob.core.windows.net/faceapi/" + model.Photo, Birthdate = model.Birthdate.Date, UserName = model.Email, Email = model.Email };
                             var result = await _userManager.CreateAsync(user, model.Password);
                             _logger.LogInformation("User created a new account with password.");
                             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

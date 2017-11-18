@@ -8,7 +8,7 @@
 
 <button class="btn-success btn-group-lg" id="createCouponsButton">Create Coupons</button>
 
-<button class="btn-danger btn-group-lg" id="deleteCouponsButton">Delete Coupons</button>
+<button class="btn-danger btn-group-lg" id="deleteCouponsButton">Revoke Coupons</button>
 
 @{
     ViewData["Title"] = "List of Vouchers";
@@ -48,11 +48,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.VoucherId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.VoucherId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.VoucherId">Delete</a>
             </td>
         </tr>
 }
