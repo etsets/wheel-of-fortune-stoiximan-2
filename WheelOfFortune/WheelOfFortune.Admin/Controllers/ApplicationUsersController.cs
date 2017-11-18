@@ -179,17 +179,20 @@ namespace WheelOfFortune.Admin.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, 
-            [Bind("Id,EmailConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit(string id,
+        //[Bind("Id,AccessFailedCount,ConcurrencyStamp,Email,EmailConfirmed,LockoutEnabled,LockoutEnd,NormalizedEmail,NormalizedUserName,PasswordHash,PhoneNumber ,PhoneNumberConfirmed  ,SecurityStamp,TwoFactorEnabled,UserName,Balance,Birthdate,Firstname,LastLogin,Lastname,Photo")]
+        [Bind("Id,EmailConfirmed,Firstname,Lastname,Photo,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")]
+            ApplicationUser applicationUser
+        )
         {
             if (id != applicationUser.Id)
             {
                 return NotFound();
             }
-
+            var userToUpdate = await _context.Gamers.SingleOrDefaultAsync(s => s.Id == id);
             if (ModelState.IsValid)
             {
-                var userToUpdate = await _context.Gamers.SingleOrDefaultAsync(s => s.Id == id);
+                //var userToUpdate = await _context.Gamers.SingleOrDefaultAsync(s => s.Id == id);
                 if (await TryUpdateModelAsync<ApplicationUser>(
                     userToUpdate,
                     "",
@@ -215,7 +218,7 @@ namespace WheelOfFortune.Admin.Controllers
                     return RedirectToAction(nameof(Index));
                 }     
             }
-            return View(applicationUser);
+            return View(userToUpdate);
         }
 
         // GET: ApplicationUsers/Delete/5
