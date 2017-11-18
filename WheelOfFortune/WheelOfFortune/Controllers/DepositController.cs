@@ -82,13 +82,13 @@ namespace WheelOfFortune.Controllers
 
                         transaction.Commit();
 
-                        return new JsonResult(new DepositResponse(1, voucher.CreditAmount + "was added to your account."));
+                        return new JsonResult(new DepositResponse(1, voucher.CreditAmount + "&euro; was added to your account.", current_user.Balance));
                     }
                     catch (Exception e)
                     {
                         transaction.Rollback();
 
-                        return new JsonResult(new DepositResponse(-2, "An unkknown error occured, please try again later"));
+                        return new JsonResult(new DepositResponse(-2, "An unkknown error occured, please try again later", 0));
                     }
 
                 }
@@ -96,7 +96,7 @@ namespace WheelOfFortune.Controllers
             else
             {
 
-                return new JsonResult(new DepositResponse(-1, "Voucher not found"));
+                return new JsonResult(new DepositResponse(-1, "Voucher not found", 0));
             }
 
         }

@@ -9,11 +9,13 @@ namespace WheelOfFortune.Models
     {
         public int status { get; set; }
         public string message { get; set; }
+        public float balance { get; set; }
 
-        public DepositResponse(int status, string message)
+        public DepositResponse(int status, string message, float balance)
         {
             this.status = status;
             this.message = message;
+            this.balance = balance;
         }
     }
 }
