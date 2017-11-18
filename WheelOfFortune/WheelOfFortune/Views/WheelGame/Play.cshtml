@@ -12,16 +12,24 @@
         var val1 = Number(document.getElementById("BetAmount").value);
         var currentBalance = Number(document.getElementById("BalanceOnTitle").innerText);
         //alert(currentBalance+" "+val1);
-        if (/^\d+$/.test(val1) && currentBalance> 0 && (val1*2.5) <= currentBalance) {
+        if (/^\d+$/.test(val1) && currentBalance > 0 && (val1 * 2.5) <= currentBalance && val1>0) {
             //proceed with rest of code
             //alert("ok");
             document.getElementById("BalanceError").innerText = '';
             document.getElementById("spinBtn").disabled = false;
         }
-        else {
-            //alert("Invalid");
+        else if (currentBalance <= 0 || (val1 * 2.5) > currentBalance)
+        {
             document.getElementById("BetAmount").value = '';
             document.getElementById("BalanceError").innerText = 'You do not have enough money to bet ! Please update your balance.';
+            document.getElementById("spinBtn").disabled = true;
+            return false;
+        }
+        else
+        {
+            //alert("Invalid");
+            document.getElementById("BetAmount").value = '';
+            document.getElementById("BalanceError").innerText = 'Invalid bet amount !';
             document.getElementById("spinBtn").disabled = true;
             return false;
         }

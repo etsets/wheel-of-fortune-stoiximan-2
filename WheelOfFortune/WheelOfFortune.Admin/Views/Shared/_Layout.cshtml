@@ -1,4 +1,5 @@
 ﻿@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 
 <!DOCTYPE html>
@@ -30,13 +31,18 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">WheelOfFortune.Admin</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Wheel Of Fortune (Admin Control Panel)</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
 
-@if (SignInManager.IsSignedIn(User))
+
+@{
+    ApplicationUser currentUser = UserManager.Users.SingleOrDefault(u => u.UserName == (UserManager.GetUserName(User)));
+
+}
+
+@if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(currentUser, "Admin"))
 {
                     <li><a asp-area="" asp-controller="WheelConfiguration" asp-action="Index">Wheel Configuration</a></li>
                       <li><a asp-area="" asp-controller="ApplicationUsers" asp-action="Index">Users Control Panel</a></li>

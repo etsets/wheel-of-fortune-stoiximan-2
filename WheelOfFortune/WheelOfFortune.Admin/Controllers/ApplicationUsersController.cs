@@ -196,7 +196,7 @@ namespace WheelOfFortune.Admin.Controllers
                 if (await TryUpdateModelAsync<ApplicationUser>(
                     userToUpdate,
                     "",
-                    s => s.LockoutEnd, s => s.LockoutEnabled, s => s.AccessFailedCount))
+                    s => s.LockoutEnd, s => s.LockoutEnabled, s => s.AccessFailedCount, s => s.EmailConfirmed))
                 {
                     try
                     {
