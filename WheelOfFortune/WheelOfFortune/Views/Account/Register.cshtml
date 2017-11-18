@@ -44,6 +44,7 @@
             <div class="form-group">
                 <label asp-for="Photo"></label>
                 <input type="file" name="ActualPhoto" />
+                <span asp-validation-for="Photo" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-default">Register</button>
         </div>
