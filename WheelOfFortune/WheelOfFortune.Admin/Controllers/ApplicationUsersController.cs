@@ -42,6 +42,7 @@ namespace WheelOfFortune.Admin.Controllers
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["EmailSortParm"] = sortOrder == "Email" ? "email_desc" : "Email";
 
+
             if (searchString != null)
             {
                 page = 1;
@@ -56,6 +57,14 @@ namespace WheelOfFortune.Admin.Controllers
 
             var gamers = from s in _context.Gamers
                            select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                gamers = gamers.Where(s => s.UserName.ToUpper().Contains(searchString.ToUpper()) || 
+                                           s.Lastname.ToUpper().Contains(searchString.ToUpper()) ||
+                                           s.Firstname.ToUpper().Contains(searchString.ToUpper()));
+            }
+
             switch (sortOrder)
             {
                 case "name_desc":
