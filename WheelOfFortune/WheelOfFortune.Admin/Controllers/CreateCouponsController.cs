@@ -103,18 +103,17 @@ namespace WheelOfFortune.Admin.Controllers
         public async Task DeleteVouchers([FromBody] JObject NumOfCoupons)
         {
             int numberOfCoupons = NumOfCoupons.Value<int>("NumOfCoupons");
-            List<Voucher> couponsToRemove = new List<Voucher>();
-            Voucher couponToRemove;
+            Voucher couponToEdit;
             while (numberOfCoupons != 0 ) {
-                couponToRemove = _context.Vouchers.FirstOrDefault(cpn => cpn.IsUsed);
-                if (couponToRemove == null)
+                couponToEdit = _context.Vouchers.FirstOrDefault(cpn => !cpn.IsUsed && cpn.Status.Equals(Voucher.VoucherStatus.New));
+                if (couponToEdit == null)
                 {
                     numberOfCoupons = 0;
                 }
                 else
                 {
                     numberOfCoupons--;
-                    _context.Vouchers.Remove(couponToRemove);
+                    couponToEdit.Status = Voucher.VoucherStatus.Revoked;
                     await _context.SaveChangesAsync();
                 
                 }
