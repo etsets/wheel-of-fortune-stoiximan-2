@@ -29,7 +29,6 @@ namespace WheelOfFortune.Admin.Controllers
 
           // POST api/json
           [HttpPost]
-          [ValidateAntiForgeryToken] 
           public IActionResult PostWheelConfig([FromBody]JObject jsonObject)
           {
                return StatusCode((int) _wheelConfig.PostWheelConfig(jsonObject));
@@ -38,8 +37,6 @@ namespace WheelOfFortune.Admin.Controllers
           [Route("/WheelConfiguration")]
           public IActionResult Index()
           {
-
-               //var json = GetWheelConfig();
                return View(_wheelConfig.GetWheelConfig());
           }
 
