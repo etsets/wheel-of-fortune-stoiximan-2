@@ -17,7 +17,7 @@
                     $(".successMessage").html(data.message);
                     $(".alert-success").removeClass("hidden");
                     $("#voucherCode").val("");
-
+                    $("#BalanceOnTitle").html(data.balance);
                 }
                 else {
                     $(".errorMessage").html(data.message)
