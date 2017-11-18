@@ -9,14 +9,20 @@
 <script>
     function validateCurrency()
     {
-        var val1 = document.getElementById("BetAmount").value;
-        if (/^\d+$/.test(val1) && val1 > 0) {
+        var val1 = Number(document.getElementById("BetAmount").value);
+        var currentBalance = Number(document.getElementById("BalanceOnTitle").innerText);
+        //alert(currentBalance+" "+val1);
+        if (/^\d+$/.test(val1) && currentBalance> 0 && val1 <= currentBalance) {
             //proceed with rest of code
-            
+            //alert("ok");
+            document.getElementById("BalanceError").innerText = '';
+            document.getElementById("spinBtn").disabled = false;
         }
         else {
             //alert("Invalid");
-            document.getElementById("BetAmount").value = 0.0;
+            document.getElementById("BetAmount").value = '';
+            document.getElementById("BalanceError").innerText = 'You do not have enough money to bet ! Please update your balance.';
+            document.getElementById("spinBtn").disabled = true;
             return false;
         }
     }
@@ -30,7 +36,7 @@
             <div class="form-group">
                 <label asp-for="BetAmount" style="font-size:15px;">Bet amount&nbsp;&#8364;&nbsp;:</label>
                 <input placeholder="&#8364;&nbsp;" asp-for="BetAmount" oninput="validateCurrency()" class="form-control" style="width: 120px;" />
-                <span asp-validation-for="BetAmount" class="text-danger"></span>
+                <span id="BalanceError" asp-validation-for="BetAmount" class="text-danger"></span>
             </div>
         </form>
     </div>
