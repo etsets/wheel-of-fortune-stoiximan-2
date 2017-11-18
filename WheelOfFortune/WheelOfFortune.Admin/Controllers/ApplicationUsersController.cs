@@ -69,7 +69,7 @@ namespace WheelOfFortune.Admin.Controllers
                     break;
             }
 
-            int pageSize = 3;
+            int pageSize = 10;
             return View(await PaginatedList<ApplicationUser>.CreateAsync(gamers.AsNoTracking(), page ?? 1, pageSize));
         }
 
@@ -180,7 +180,7 @@ namespace WheelOfFortune.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, 
-            [Bind("Id,UserName,Email,EmailConfirmed,PhoneNumber,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] ApplicationUser applicationUser)
+            [Bind("Id,EmailConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] ApplicationUser applicationUser)
         {
             if (id != applicationUser.Id)
             {
