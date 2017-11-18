@@ -59,7 +59,7 @@ namespace WheelOfFortune.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Spin([FromBody]JObject userdata)
         {
             var curUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -104,7 +104,7 @@ namespace WheelOfFortune.Controllers
                 }
             }
 
-            return PartialView("_LoginPartial", curUser);
+            return PartialView("_LoginPartial");
         }
 
         [HttpGet]
