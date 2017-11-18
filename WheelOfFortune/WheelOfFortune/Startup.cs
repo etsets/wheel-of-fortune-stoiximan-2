@@ -41,10 +41,10 @@ namespace WheelOfFortune
                     options.Password.RequiredUniqueChars = 2;
                     // Lockout settings
                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
-                    options.Lockout.MaxFailedAccessAttempts = 0; //3
-                    options.Lockout.AllowedForNewUsers = false;//true
+                    options.Lockout.MaxFailedAccessAttempts = 3;
+                    options.Lockout.AllowedForNewUsers = true;
                     // Signin settings
-                    options.SignIn.RequireConfirmedEmail = false;//true
+                    options.SignIn.RequireConfirmedEmail = true;
                     options.SignIn.RequireConfirmedPhoneNumber = false;
                })
                    .AddEntityFrameworkStores<ApplicationDbContext>()
