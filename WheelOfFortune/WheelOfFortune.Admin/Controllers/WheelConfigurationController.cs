@@ -3,8 +3,6 @@ using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Authorization;
 using WheelOfFortune.Admin.Services;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace WheelOfFortune.Admin.Controllers
 {
      [Route("api/json")]
@@ -21,7 +19,6 @@ namespace WheelOfFortune.Admin.Controllers
 
           // GET: api/json
           [HttpGet]
-          [Route("api/json")]
           [AllowAnonymous]
 
           public JObject GetWheelConfig()
@@ -31,7 +28,6 @@ namespace WheelOfFortune.Admin.Controllers
 
 
           // POST api/json
-          [Route("api/json")]
           [HttpPost]
           [ValidateAntiForgeryToken] 
           public IActionResult PostWheelConfig([FromBody]JObject jsonObject)
@@ -39,12 +35,13 @@ namespace WheelOfFortune.Admin.Controllers
                return StatusCode((int) _wheelConfig.PostWheelConfig(jsonObject));
           }
 
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return View(_wheelConfig.GetWheelConfig());
-        }
+          [Route("/WheelConfiguration")]
+          public IActionResult Index()
+          {
 
+               //var json = GetWheelConfig();
+               return View(_wheelConfig.GetWheelConfig());
+          }
 
      }
 }

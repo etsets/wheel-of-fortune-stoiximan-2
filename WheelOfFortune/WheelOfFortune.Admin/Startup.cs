@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
@@ -11,11 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using WheelOfFortune.Admin.Data;
 using WheelOfFortune.Admin.Models;
 using WheelOfFortune.Admin.Services;
-using Microsoft.AspNetCore.Cors;
 
 namespace WheelOfFortune.Admin
 {
-    public class Startup
+     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -38,7 +33,7 @@ namespace WheelOfFortune.Admin
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
                services.Configure<AuthMessageSenderOptions>(Configuration);
-               services.AddTransient<IWheelConfig, WheelConfig>();
+               services.AddSingleton<IWheelConfig, WheelConfig>();
 
             services.AddMvc();
 
@@ -49,7 +44,7 @@ namespace WheelOfFortune.Admin
                //});
 
                //Add Cross-origin resource sharing to avoid problems calling localhost resources from localhost
-               services.AddCors();
+               //services.AddCors();
 
           }
 
@@ -63,11 +58,11 @@ namespace WheelOfFortune.Admin
                 app.UseBrowserLink();
                 app.UseDatabaseErrorPage();
 
-                    //Shows UseCors with CorsPolicyBuilder.
-                    app.UseCors(builder =>
-                       builder.WithOrigins("*") //Use these settings for localhost testing only
-                       .AllowAnyHeader()
-                       );
+                //Shows UseCors with CorsPolicyBuilder.
+                //app.UseCors(builder =>
+                //    builder.WithOrigins("*") //Use these settings for localhost testing only
+                //    .AllowAnyHeader()
+                //);
 
 
                }
