@@ -26,13 +26,17 @@ namespace WheelOfFortune.Controllers
             _context = context;
             _userManager = userManager;
         }
+
         [Authorize]
-          [ResponseCache(NoStore = true, Duration = 0)]
-          public IActionResult Index()
+        [ResponseCache(NoStore = true, Duration = 0)]
+        [HttpGet]
+        public IActionResult Index()
         {
             return View();
         }
+
         [Authorize]
+        [HttpGet]
         public async Task<IActionResult> History()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -43,7 +47,9 @@ namespace WheelOfFortune.Controllers
                 .ToListAsync();
             return View(entries);
         }
+
         [Authorize]
+        [HttpGet]
         public async Task<IActionResult> SpinDetails(int hid)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -54,7 +60,9 @@ namespace WheelOfFortune.Controllers
                 .FirstOrDefaultAsync();
             return View(spindetails);
         }
+
         [Authorize]
+        [HttpGet]
         public async Task<IActionResult> DepositDetails(int hid)
         {
             var user = await _userManager.GetUserAsync(User);

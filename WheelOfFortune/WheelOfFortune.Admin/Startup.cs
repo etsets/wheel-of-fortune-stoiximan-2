@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
@@ -11,11 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using WheelOfFortune.Admin.Data;
 using WheelOfFortune.Admin.Models;
 using WheelOfFortune.Admin.Services;
-using Microsoft.AspNetCore.Cors;
 
 namespace WheelOfFortune.Admin
 {
-    public class Startup
+     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
@@ -54,7 +49,7 @@ namespace WheelOfFortune.Admin
           }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env,
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
                               RoleManager<IdentityRole> rolemanager)
         {
             if (env.IsDevelopment())
