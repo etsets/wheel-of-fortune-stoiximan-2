@@ -5,7 +5,7 @@ function loadJSON(callback) {
 
   var xobj = new XMLHttpRequest();
   xobj.overrideMimeType("application/json");
-  xobj.open('GET', 'https://localhost:44335/api/json', true); 
+  xobj.open('GET', 'https://wofadmin.azurewebsites.net/api/json', true); 
     // in case of AJAX call --> url : urls.PlayWheel
   //xobj.open('GET', 'WheelGame/GetWheelPlay', true); //ok..
   //xobj.send();

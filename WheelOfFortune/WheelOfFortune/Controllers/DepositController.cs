@@ -39,7 +39,7 @@ namespace WheelOfFortune.Controllers
             var current_user = await _userManager.GetUserAsync(HttpContext.User);
 
             var voucher = context_.Set<Voucher>()
-                .Where(c => c.VoucherCode.Equals(vouchercode, StringComparison.OrdinalIgnoreCase) && c.IsUsed == false)
+                .Where(c => c.VoucherCode.Equals(vouchercode, StringComparison.OrdinalIgnoreCase) && c.IsUsed == false && c.Status == Voucher.VoucherStatus.New)
                 .SingleOrDefault();
 
             if (voucher != null)
@@ -74,6 +74,8 @@ namespace WheelOfFortune.Controllers
 
                         current_user.Balance = current_user.Balance + voucher.CreditAmount;
                         voucher.IsUsed = true;
+                        
+                        
 
                         context_.Update(current_user);
                         context_.Update(voucher);
@@ -82,13 +84,13 @@ namespace WheelOfFortune.Controllers
 
                         transaction.Commit();
 
-                        return new JsonResult(new DepositResponse(1, voucher.CreditAmount + "was added to your account."));
+                        return new JsonResult(new DepositResponse(1, voucher.CreditAmount + "&euro; was added to your account.", current_user.Balance));
                     }
                     catch (Exception e)
                     {
                         transaction.Rollback();
 
-                        return new JsonResult(new DepositResponse(-2, "An unkknown error occured, please try again later"));
+                        return new JsonResult(new DepositResponse(-2, "An unkknown error occured, please try again later", 0));
                     }
 
                 }
@@ -96,7 +98,7 @@ namespace WheelOfFortune.Controllers
             else
             {
 
-                return new JsonResult(new DepositResponse(-1, "Voucher not found"));
+                return new JsonResult(new DepositResponse(-1, "Voucher not found", 0));
             }
 
         }
