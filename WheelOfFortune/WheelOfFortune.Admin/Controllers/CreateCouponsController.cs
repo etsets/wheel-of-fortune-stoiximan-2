@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WheelOfFortune.Admin.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [Produces("application/json")]
     [Route("[controller]/[action]")]
     public class CreateCouponsController : Controller
