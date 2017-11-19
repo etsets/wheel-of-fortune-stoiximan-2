@@ -219,63 +219,63 @@ namespace WheelOfFortune.Admin.Controllers
             return View();
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
-            {
-                //Fill rest fields with defaulT values - we do not care
-                var user = new ApplicationUser
-                { UserName = model.Email,
-                    Email = model.Email,
-                    Firstname = model.Email,
-                    Lastname = model.Email,
-                    Birthdate = DateTime.Today,
-                    Photo = "empty.png",
-                    LastLogin = DateTime.Now
-                };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        //{
+        //    ViewData["ReturnUrl"] = returnUrl;
+        //    if (ModelState.IsValid)
+        //    {
+        //        Fill rest fields with defaulT values - we do not care
+        //        var user = new ApplicationUser
+        //        { UserName = model.Email,
+        //            Email = model.Email,
+        //            Firstname = model.Email,
+        //            Lastname = model.Email,
+        //            Birthdate = DateTime.Today,
+        //            Photo = "empty.png",
+        //            LastLogin = DateTime.Now
+        //        };
+        //        var result = await _userManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
                     
-                    if (!await RoleManager.RoleExistsAsync("Admin"))
-                    {
-                        var users = new IdentityRole("Admin");
-                        var response = await RoleManager.CreateAsync(users);
-                        if (response.Succeeded)
-                        {
-                            await _userManager.AddToRoleAsync(user, "Admin");
+        //            if (!await RoleManager.RoleExistsAsync("Admin"))
+        //            {
+        //                var users = new IdentityRole("Admin");
+        //                var response = await RoleManager.CreateAsync(users);
+        //                if (response.Succeeded)
+        //                {
+        //                    await _userManager.AddToRoleAsync(user, "Admin");
 
-                            await _signInManager.SignInAsync(user, isPersistent: false);
-                            _logger.LogInformation("User created a new account with password.");
+        //                    await _signInManager.SignInAsync(user, isPersistent: false);
+        //                    _logger.LogInformation("User created a new account with password.");
                             
-                        }
-                    }
-                    else
-                    {
-                        await _userManager.AddToRoleAsync(user, "Admin");
+        //                }
+        //            }
+        //            else
+        //            {
+        //                await _userManager.AddToRoleAsync(user, "Admin");
 
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        _logger.LogInformation("User created a new account with password.");
-                    }
+        //                await _signInManager.SignInAsync(user, isPersistent: false);
+        //                _logger.LogInformation("User created a new account with password.");
+        //            }
 
-                    //_logger.LogInformation("User created a new account with password.");
+        //            _logger.LogInformation("User created a new account with password.");
 
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    //await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+        //            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        //            var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+        //            await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
-                    return RedirectToAction(nameof(HomeController.Index), "Home");
-                }
-                AddErrors(result);
-            }
+        //            return RedirectToAction(nameof(HomeController.Index), "Home");
+        //        }
+        //        AddErrors(result);
+        //    }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
+        //     If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
