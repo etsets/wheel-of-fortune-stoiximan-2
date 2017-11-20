@@ -3,7 +3,7 @@
             $.ajax({
                 type: 'POST',
                 url: 'CreateCoupons',
-                data: JSON.stringify({numberOfTickets: 1000 }),
+                data: JSON.stringify({numberOfTickets: 10 }),
                 contentType: 'application/json;',
                 success: function () {
                     window.location.reload();
@@ -15,7 +15,7 @@
             $.ajax({
                 url: 'DeleteVouchers',
                 type: 'POST',
-                data: JSON.stringify({ NumOfCoupons: 1000 }),
+                data: JSON.stringify({ NumOfCoupons: 10 }),
                 contentType: 'application/json;',
                 success: function () {
                     window.location.reload();
